@@ -62,6 +62,10 @@ export const useDesignStore = defineStore({
             }
         },
 
+        getCurrWidget(){
+            return this.curWidget
+        },
+
         setShapeStyle({ top, left, width, height, rotate }: ShapeStyle) {
             if (this.curWidget) {
                 if (top) this.curWidget.style.top = top

@@ -6,6 +6,7 @@
       :key="index"
       class="shape-point"
       :style="getShapePonitStyle(item)"
+      @mousedown="MouseDownOnPoint(item)"
     ></div>
   </div>
 </template>
@@ -23,9 +24,40 @@ const props = defineProps({
 
 const canvasRef = inject("canvasRef");
 
-const { setShapeStyle } = useDesignStore();
+const { setShapeStyle, getCurrWidget } = useDesignStore();
+const { curWidget } = toRefs(useDesignStore());
 
 const pointList = ["lt", "t", "rt", "r", "rb", "b", "lb", "l"]; // 八个方向
+
+// 移动shape
+function handleMouseDownOnShape(e: any) {
+  console.log("handleMouseDownOnShape");
+  console.log("handleMouseDownOnShape");
+  e.preventDefault();
+  e.stopPropagation();
+
+  const { top: widgetY, left: widgetX } = props.defaultStyle;
+  const { clientX: startX, clientY: startY } = e;
+
+  const move = (moveEvent: any) => {
+    const { clientX: currX, clientY: currY } = moveEvent;
+
+    let left = currX - startX + Number(widgetX);
+    let top = currY - startY + Number(widgetY);
+
+    // setShapeStyle({ top, left });
+    curWidget.value.style.top = top;
+    curWidget.value.style.left = left;
+  };
+
+  const up = () => {
+    document.removeEventListener("mousemove", move);
+    document.removeEventListener("mouseup", up);
+  };
+
+  document.addEventListener("mousemove", move);
+  document.addEventListener("mouseup", up);
+}
 
 // 计算 shape 8个圆点位置
 function getShapePonitStyle(point: string) {
@@ -60,22 +92,39 @@ function getShapePonitStyle(point: string) {
   };
 }
 
-// 移动shape
-function handleMouseDownOnShape(e: any) {
-  console.log("handleMouseDownOnShape");
+function MouseDownOnPoint(point: string) {
+  const e = window.event;
   e.preventDefault();
-  e.stopPropagation();
 
-  const { top: widgetY, left: widgetX } = props.defaultStyle;
+  let pot = curWidget.value.style;
   const { clientX: startX, clientY: startY } = e;
 
   const move = (moveEvent: any) => {
     const { clientX: currX, clientY: currY } = moveEvent;
+    const disX = currX - startX;
+    const disY = currY - startY;
+    console.log('currY', currY);
+    console.log('startY', startY);
+    console.log('disY', disY);
+    const haveT = /t/.test(point);
+    const haveR = /r/.test(point);
+    const haveB = /b/.test(point);
+    const haveL = /l/.test(point);
+    const height = pot.height + (haveT ? -disY : haveB ? disY : 0);
+    console.log("pot.height", pot.height);
+    console.log(
+      "haveT ? -disY : haveB ? disY : 0",
+      haveT ? -disY : haveB ? disY : 0
+    );
+    const width = pot.width + (haveL ? -disX : haveR ? disX : 0);
+    const left = pot.left + (haveL ? disX : 0);
+    const top = pot.top + (haveT ? disY : 0);
 
-    let left = currX - startX + Number(widgetX);
-    let top = currY - startY + Number(widgetY);
-
-    setShapeStyle({ top, left });
+    // setShapeStyle({ top, left, height, width });
+    curWidget.value.style.top = top;
+    curWidget.value.style.left = left;
+    curWidget.value.style.height = height;
+    curWidget.value.style.width = width;
   };
 
   const up = () => {
@@ -85,23 +134,6 @@ function handleMouseDownOnShape(e: any) {
 
   document.addEventListener("mousemove", move);
   document.addEventListener("mouseup", up);
-}
-
-function MouseDownOnPoint(e: any, point: string) {
-  e.stopPropagation();
-  e.preventDefault();
-
-  const style = { ...props.defaultStyle };
-
-  // 画布位置
-  const editorRectInfo = (canvasRef as any).getBoundingClientRect();
-  // 鼠标位置
-  const pointRect = e.target.getBoundingClientRect();
-  // 物料中心点
-  const center = {
-    x: style.top + style.height / 2,
-    y: style.left + style.width / 2,
-  };
 }
 </script>
 
