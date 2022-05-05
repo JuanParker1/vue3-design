@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { ref } from "@vue/reactivity";
 import WidgetList from "@/components/Design/DesignWidget.vue";
-import DesignCanvas from "@/components/Design/DesignCanvas.vue";
+import DesignCanvas from "@/components/Design/DesignCanvas/index.vue";
 import DesignOperator from "@/components/Design/DesignOperator.vue";
 
 const y = ref(2);

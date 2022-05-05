@@ -6,7 +6,7 @@
  * @LastEditTime: 2022-04-27 14:50:42
 -->
 <template>
-  <div class="text">
+  <div class="text " >
     {{ text }}
   </div>
 </template>
@@ -17,4 +17,5 @@ import { ref } from "@vue/reactivity";
 let text = ref("text");
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+</style>

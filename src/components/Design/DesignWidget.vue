@@ -1,12 +1,7 @@
 <template>
   <div class="design-widget" @dragstart="handleDragStart">
-    <div
-      v-for="(widget, index) in widgets"
-      :key="index"
-      class="design-widget-item shadow"
-      :draggable="true"
-      :data-id="widget.id"
-    >
+    <div v-for="(widget, index) in widgets" :key="index" class="design-widget-item shadow" :draggable="true"
+      :data-component="widget.component">
       <span>{{ widget.label }}</span>
       <span>xx</span>
     </div>
@@ -15,12 +10,10 @@
 
 <script setup lang='ts'>
 import widgets from "../../mock/widget";
+import { useDesignStore } from '@/store/design';
 
-function handleDragStart(e: any) {
-  console.log("handleDragStart");
+const { handleDragStart } = useDesignStore()
 
-  e.dataTransfer.setData("id", e.target.dataset.id);
-}
 </script>
 
 <style lang="scss" scoped>

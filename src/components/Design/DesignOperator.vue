@@ -7,7 +7,7 @@
 -->
 <template>
   <div class="design-operator">
-   operator
+    operator
   </div>
 </template>
 
