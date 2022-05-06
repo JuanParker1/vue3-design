@@ -6,7 +6,7 @@
       :key="index"
       class="shape-point"
       :style="getShapePonitStyle(item)"
-      @mousedown="MouseDownOnPoint(item)"
+      @mousedown="MouseDownOnPoint($event, item)"
     ></div>
   </div>
 </template>
@@ -31,8 +31,6 @@ const pointList = ["lt", "t", "rt", "r", "rb", "b", "lb", "l"]; // 八个方向
 
 // 移动shape
 function handleMouseDownOnShape(e: any) {
-  console.log("handleMouseDownOnShape");
-  console.log("handleMouseDownOnShape");
   e.preventDefault();
   e.stopPropagation();
 
@@ -92,30 +90,24 @@ function getShapePonitStyle(point: string) {
   };
 }
 
-function MouseDownOnPoint(point: string) {
-  const e = window.event;
+// 移动小圆点，收缩shape
+function MouseDownOnPoint(e: any, point: string) {
+  const downEvent = window.event;
+  e.stopPropagation();
   e.preventDefault();
 
-  let pot = curWidget.value.style;
+  let pot = { ...props.defaultStyle };
   const { clientX: startX, clientY: startY } = e;
 
   const move = (moveEvent: any) => {
     const { clientX: currX, clientY: currY } = moveEvent;
     const disX = currX - startX;
     const disY = currY - startY;
-    console.log('currY', currY);
-    console.log('startY', startY);
-    console.log('disY', disY);
     const haveT = /t/.test(point);
     const haveR = /r/.test(point);
     const haveB = /b/.test(point);
     const haveL = /l/.test(point);
     const height = pot.height + (haveT ? -disY : haveB ? disY : 0);
-    console.log("pot.height", pot.height);
-    console.log(
-      "haveT ? -disY : haveB ? disY : 0",
-      haveT ? -disY : haveB ? disY : 0
-    );
     const width = pot.width + (haveL ? -disX : haveR ? disX : 0);
     const left = pot.left + (haveL ? disX : 0);
     const top = pot.top + (haveT ? disY : 0);
