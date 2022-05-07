@@ -3,38 +3,53 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-07 09:39:30
+ * @LastEditTime: 2022-05-07 17:14:37
 -->
 <template>
   <div
-    ref="canvasRef"
     class="design-container"
     @dragover="handleDragOver"
     @drop="handleDrop($event, canvasRef)"
   >
-    <div class="design-shell">
+    <div
+      class="design-shell"
+      ref="canvasRef"
+      @contextmenu="handleContextMenu($event)"
+    >
       <Shape
         v-for="item in widgetList"
         v-model:widgetStyle="item.style"
-        :style="getShapeStyle(item.style)"
         :key="item.id"
+        :id="item.id"
+        :active="item.id === curWidget.id"
+        :style="getShapeStyle(item.style)"
       >
-        <component :is="item.component" :style="getWidgetStyle(item.style)" />
+        <component
+          class="design-shell-widget"
+          :is="item.component"
+          :style="getWidgetStyle(item.style)"
+        />
       </Shape>
+
+      <ContextMenu ref="ContentMeauRef"></ContextMenu>
     </div>
   </div>
 </template>
 
 <script setup lang='ts'>
 import { reactive, ref, toRefs } from "@vue/reactivity";
-import { useDesignStore } from "@/store/design";
-import Shape from "./Shape";
-import { provide } from "vue-demi";
+import { onMounted, provide } from "vue-demi";
+import { useDesignStore } from "@/store/design.ts";
+import { useCanvas } from "./useCanvas";
+import Shape from "./Shape.vue";
+import ContextMenu from "./ContextMenu.vue";
 
 const { handleDrop, handleDragOver } = useDesignStore();
-const { widgetList } = toRefs(useDesignStore());
-const canvasRef = ref(null);
+const { widgetList, curWidget } = toRefs(useDesignStore());
 
+const canvasRef = ref<HTMLElement | null>(null);
+const ContentMeauRef = ref<HTMLElement | null>(null);
+const { handleContextMenu } = useCanvas(ContentMeauRef);
 provide("canvasRef", canvasRef);
 
 function getWidgetStyle(style: any) {
@@ -64,10 +79,15 @@ function getShapeStyle(style: any) {
   overflow: auto;
 
   .design-shell {
+    position: relative;
     width: 375px;
     height: 675px;
     background: #fff;
     margin: 30px auto;
+
+    .design-shell-widget {
+      position: absolute;
+    }
   }
 }
 </style>

@@ -10,22 +10,27 @@ interface DesignState {
 
 export const useDesignStore = defineStore({
   id: "app-design",
+
   state: (): DesignState => {
     return {
       widgetList: [],
       curWidget: null,
     };
   },
+
   actions: {
+    // 开始拖拽物料
     handleDragStart(e: any) {
       e.dataTransfer.setData("component", e.target.dataset.component);
     },
 
+    // 物料拖拽中
     handleDragOver(e: any) {
       e.preventDefault();
       e.dataTransfer.dropEffect = "copy";
     },
 
+    // 物料拖拽结束
     handleDrop(e: any, canvas: any) {
       e.preventDefault();
       e.stopPropagation();
@@ -37,24 +42,17 @@ export const useDesignStore = defineStore({
 
       if (this.curWidget) {
         this.curWidget.id = createId(8);
-        this.curWidget.style.top = e.clientY - rectInfo.y;
-        this.curWidget.style.left = e.clientX - rectInfo.x;
+        this.curWidget.style.left =
+          e.clientX - rectInfo.x - this.curWidget.style.width / 2;
+        this.curWidget.style.top =
+          e.clientY - rectInfo.y - this.curWidget.style.height / 2;
         this.widgetList.push(this.curWidget);
       }
     },
 
-    getCurrWidget() {
-      return this.curWidget;
-    },
-
-    setShapeStyle({ top, left, width, height, rotate }: WidgetStyle) {
-      if (this.curWidget) {
-        if (top) this.curWidget.style.top = top;
-        if (left) this.curWidget.style.left = left;
-        if (width) this.curWidget.style.width = width;
-        if (height) this.curWidget.style.height = height;
-        if (rotate) this.curWidget.style.rotate = rotate;
-      }
+    // 当前操作物料
+    setCurrWidget(id: string) {
+      this.curWidget = this.widgetList.find((w) => w.id == id);
     },
   },
 });
