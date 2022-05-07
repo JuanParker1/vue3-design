@@ -64,7 +64,7 @@ const { handleMoveShape, getShapePonitStyle, handleShrinkShape } =
     position: absolute;
     top: 0px;
     left: 0px;
-    z-index: 100000;
+    z-index: 10000;
   }
 
   .shape-line {
@@ -72,6 +72,7 @@ const { handleMoveShape, getShapePonitStyle, handleShrinkShape } =
     width: 100%;
     height: 100%;
     border: 3px solid #ff6e7b;
+    z-index: 99;
   }
 
   .shape-point {
@@ -84,6 +85,7 @@ const { handleMoveShape, getShapePonitStyle, handleShrinkShape } =
     border: 1px solid #ff6e7b;
     border-radius: 50%;
     transform: translate(-50%, -50%);
+    z-index: 10001;
     cursor: e-resize;
 
     &-l {
