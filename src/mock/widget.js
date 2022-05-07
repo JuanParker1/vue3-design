@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 11:30:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-04-29 17:26:56
+ * @LastEditTime: 2022-05-07 13:50:39
  */
 export default [
   {
@@ -15,8 +15,8 @@ export default [
     events: {}, // 事件列表
     style: {
       // 组件样式
-      width: 80,
-      height: 133,
+      width: 128,
+      height: 80,
       fontSize: 14,
       fontWeight: 500,
       lineHeight: '',

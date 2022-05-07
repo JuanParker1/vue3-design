@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 10:58:44
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-04-27 15:26:25
+ * @LastEditTime: 2022-05-07 14:21:25
 -->
 <template>
   <div class="editor">
@@ -25,7 +25,7 @@ import WidgetList from "@/components/Design/DesignWidget.vue";
 import DesignCanvas from "@/components/Design/DesignCanvas/index.vue";
 import DesignOperator from "@/components/Design/DesignOperator.vue";
 
-const y = ref(2);
+const y = ref(2);11
 </script>
 
 <style lang='scss'>

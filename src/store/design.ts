@@ -1,28 +1,11 @@
 import { defineStore } from "pinia";
 import _ from "lodash";
-import widgets from "../mock/widget.js";
-
-interface widgetDetail {
-  id: string;
-  component: string;
-  label: string;
-  icon: string;
-  animations: object;
-  events: object;
-  style: any;
-}
-
+import widgets from "@/mock/widget";
+import { createId } from "@/hooks/common";
+import { WidgetStyle, Widget } from "@/types/widget";
 interface DesignState {
-  curWidget: widgetDetail | null;
-  widgetList: widgetDetail[];
-}
-
-interface ShapeStyle {
-  top?: number;
-  left?: number;
-  width?: number;
-  height?: number;
-  rotate?: number;
+  curWidget: Widget | null;
+  widgetList: Widget[];
 }
 
 export const useDesignStore = defineStore({
@@ -44,16 +27,16 @@ export const useDesignStore = defineStore({
     },
 
     handleDrop(e: any, canvas: any) {
-      console.log("handleDrop");
       e.preventDefault();
       e.stopPropagation();
       const rectInfo = canvas.getBoundingClientRect();
       let curWidget = widgets.find(
-        (c: widgetDetail) => c.component == e.dataTransfer.getData("component")
+        (c: Widget) => c.component == e.dataTransfer.getData("component")
       );
       this.curWidget = curWidget ? _.cloneDeep(curWidget) : null;
 
       if (this.curWidget) {
+        this.curWidget.id = createId(8);
         this.curWidget.style.top = e.clientY - rectInfo.y;
         this.curWidget.style.left = e.clientX - rectInfo.x;
         this.widgetList.push(this.curWidget);
@@ -64,7 +47,7 @@ export const useDesignStore = defineStore({
       return this.curWidget;
     },
 
-    setShapeStyle({ top, left, width, height, rotate }: ShapeStyle) {
+    setShapeStyle({ top, left, width, height, rotate }: WidgetStyle) {
       if (this.curWidget) {
         if (top) this.curWidget.style.top = top;
         if (left) this.curWidget.style.left = left;

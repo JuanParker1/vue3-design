@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-04-29 17:29:01
+ * @LastEditTime: 2022-05-07 09:39:30
 -->
 <template>
   <div
@@ -15,8 +15,9 @@
     <div class="design-shell">
       <Shape
         v-for="item in widgetList"
-        :default-style="item.style"
+        v-model:widgetStyle="item.style"
         :style="getShapeStyle(item.style)"
+        :key="item.id"
       >
         <component :is="item.component" :style="getWidgetStyle(item.style)" />
       </Shape>
