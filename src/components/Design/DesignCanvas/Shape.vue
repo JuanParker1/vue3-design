@@ -1,6 +1,7 @@
 <template>
   <div
     class="shape"
+    :style="getShapeStyle(props.widgetStyle)"
     @mousedown="handleMoveShape($event, props.widgetStyle)"
     @click="setCurrWidget(props.id)"
   >
@@ -46,8 +47,12 @@ const emits = defineEmits(["update:widgetStyle"]);
 
 const { setCurrWidget } = useDesignStore();
 
-const { handleMoveShape, getShapePonitStyle, handleShrinkShape } =
-  useShape(emits);
+const {
+  handleMoveShape,
+  getShapePonitStyle,
+  handleShrinkShape,
+  getShapeStyle,
+} = useShape(emits);
 </script>
 
 <style lang="scss" scoped>

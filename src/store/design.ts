@@ -3,6 +3,7 @@ import _ from "lodash";
 import widgets from "@/mock/widget";
 import { createId } from "@/hooks/common";
 import { WidgetStyle, Widget } from "@/types/widget";
+
 interface DesignState {
   curWidget: Widget | null;
   widgetList: Widget[];
@@ -32,6 +33,7 @@ export const useDesignStore = defineStore({
 
     // 物料拖拽结束
     handleDrop(e: any, canvas: any) {
+      console.log('canvas', canvas);
       e.preventDefault();
       e.stopPropagation();
       const rectInfo = canvas.getBoundingClientRect();

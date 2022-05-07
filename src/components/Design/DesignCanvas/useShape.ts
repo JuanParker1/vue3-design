@@ -1,11 +1,19 @@
 import { defineEmits } from "vue";
 import { WidgetStyle } from "@/types/widget";
+import { getCommonStyle } from "@/utils//style.ts";
+import { useActiontore } from "@/store/action.ts";
+
 
 export function useShape(emits: any) {
+  const { closeAction } = useActiontore();
+
+
   // 移动 shape
   function handleMoveShape(e: any, widgetStyle: WidgetStyle) {
     e.preventDefault();
     e.stopPropagation();
+
+    closeAction()
 
     const { top: widgetY, left: widgetX } = widgetStyle;
     const { clientX: startX, clientY: startY } = e;
@@ -102,5 +110,10 @@ export function useShape(emits: any) {
     document.addEventListener("mouseup", up);
   }
 
-  return { handleMoveShape, getShapePonitStyle, handleShrinkShape };
+  function getShapeStyle(widgetStyle: WidgetStyle) {
+    let { top, left, width, height } = widgetStyle
+    return getCommonStyle({ top, left, width, height })
+  }
+
+  return { handleMoveShape, getShapePonitStyle, handleShrinkShape, getShapeStyle };
 }

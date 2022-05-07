@@ -10,28 +10,21 @@
     class="design-container"
     @dragover="handleDragOver"
     @drop="handleDrop($event, canvasRef)"
+    @click="handleDesignContainer"
   >
-    <div
-      class="design-shell"
-      ref="canvasRef"
-      @contextmenu="handleContextMenu($event)"
-    >
+    <div class="design-shell" ref="canvasRef" @contextmenu="handleContextMenu">
       <Shape
-        v-for="item in widgetList"
+        v-for="(item, index) in widgetList"
         v-model:widgetStyle="item.style"
         :key="item.id"
         :id="item.id"
+        :zIndex="index"
         :active="item.id === curWidget.id"
-        :style="getShapeStyle(item.style)"
       >
-        <component
-          class="design-shell-widget"
-          :is="item.component"
-          :style="getWidgetStyle(item.style)"
-        />
+        <component class="design-shell-widget" :is="item.component" />
       </Shape>
 
-      <ContextMenu ref="ContentMeauRef"></ContextMenu>
+      <ContextMenu ref="contentMeauRef"></ContextMenu>
     </div>
   </div>
 </template>
@@ -44,30 +37,15 @@ import { useCanvas } from "./useCanvas";
 import Shape from "./Shape.vue";
 import ContextMenu from "./ContextMenu.vue";
 
-const { handleDrop, handleDragOver } = useDesignStore();
 const { widgetList, curWidget } = toRefs(useDesignStore());
+const { handleDrop, handleDragOver } = useDesignStore();
 
 const canvasRef = ref<HTMLElement | null>(null);
-const ContentMeauRef = ref<HTMLElement | null>(null);
-const { handleContextMenu } = useCanvas(ContentMeauRef);
-provide("canvasRef", canvasRef);
-
-function getWidgetStyle(style: any) {
-  return {
-    width: `100%`,
-    height: `100%`,
-  };
-}
-
-function getShapeStyle(style: any) {
-  return {
-    position: "absolute",
-    top: `${style.top}px`,
-    left: `${style.left}px`,
-    width: `${style.width}px`,
-    height: `${style.height}px`,
-  };
-}
+const contentMeauRef = ref<HTMLElement | null>(null);
+const { handleContextMenu, handleDesignContainer } = useCanvas(
+  contentMeauRef,
+  canvasRef
+);
 </script>
 
 <style lang="scss" scoped>
@@ -87,6 +65,8 @@ function getShapeStyle(style: any) {
 
     .design-shell-widget {
       position: absolute;
+      width: 100%;
+      height: 100%;
     }
   }
 }
