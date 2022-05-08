@@ -56,5 +56,15 @@ export const useDesignStore = defineStore({
     setCurrWidget(id: string) {
       this.curWidget = this.widgetList.find((w) => w.id == id);
     },
+
+    setCurrWidgetStyle(style: Object) {
+      Object.keys(style).forEach(key => {
+        this.curWidget.style[key] = style[key]
+      })
+      console.log('setCurrWidgetStyle');
+      console.log(this.curWidget.style);
+      
+      
+    }
   },
 });

@@ -2,8 +2,7 @@
   <div
     class="shape"
     :style="getShapeStyle(props.widgetStyle)"
-    @mousedown="handleMoveShape($event, props.widgetStyle)"
-    @click="setCurrWidget(props.id)"
+    @mousedown="handleMoveShape($event,props.id, props.widgetStyle)"
   >
     <div class="shape-mask" :id="id"></div>
 

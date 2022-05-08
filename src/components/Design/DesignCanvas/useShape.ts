@@ -3,16 +3,19 @@ import { WidgetStyle } from "@/types/widget";
 import { getCommonStyle } from "@/utils//style.ts";
 import { useActiontore } from "@/store/action.ts";
 import { useSubLine } from './useSubLine'
-
+import { useDesignStore } from "@/store/design.ts";
 
 export function useShape(emits: any) {
   const { closeAction } = useActiontore();
-  const { detectionSubLine } = useSubLine()
+  const { detectionSubLine, hideSubLine } = useSubLine()
+  const { setCurrWidget } = useDesignStore();
 
   // 移动 shape
-  function handleMoveShape(e: any, widgetStyle: WidgetStyle) {
+  function handleMoveShape(e: any, id: string, widgetStyle: WidgetStyle) {
     e.preventDefault();
     e.stopPropagation();
+
+    setCurrWidget(id)
 
     // 关闭菜单
     closeAction()
@@ -35,6 +38,7 @@ export function useShape(emits: any) {
     const up = () => {
       document.removeEventListener("mousemove", move);
       document.removeEventListener("mouseup", up);
+      hideSubLine()
     };
 
     document.addEventListener("mousemove", move);

@@ -21,18 +21,19 @@ const { lines } = useSubLine();
 .sub-line {
   .sub-line-item {
     position: absolute;
-    background: #59c7f9;
     z-index: 1000;
   }
 
   .xline {
     width: 100%;
     height: 1px;
+    border-top: 1px dashed #ff6e7b;
   }
 
   .yline {
     width: 1px;
     height: 100%;
+    border-left: 1px dashed #ff6e7b;
   }
 }
 </style>

@@ -27,9 +27,10 @@ const lines = ref<SubLine[]>([
     { type: "yr", show: false, style: {} },
 ]);
 
-const diff: number = 2
+const diff: number = 5
 
 const { widgetList, curWidget } = toRefs(useDesignStore());
+const { setCurrWidgetStyle } = useDesignStore()
 
 function detectionSubLine() {
 
@@ -47,7 +48,22 @@ function detectionSubLine() {
                     isNearly: isNearly(curWidget.value.style.top, top),
                     type: 'xt',
                     lineShift: top,
-                }
+                },
+                {
+                    isNearly: isNearly(curWidget.value.style.top, bottom),
+                    type: 'xt',
+                    lineShift: bottom,
+                },
+                {
+                    isNearly: isNearly(curWidget.value.style.top + curWidget.value.style.height, top),
+                    type: 'xb',
+                    lineShift: top,
+                },
+                {
+                    isNearly: isNearly(curWidget.value.style.top + curWidget.value.style.height, bottom),
+                    type: 'xb',
+                    lineShift: bottom,
+                },
             ],
             left: [
 
@@ -59,6 +75,11 @@ function detectionSubLine() {
                 if (!condition.isNearly) return
 
                 const line: SubLine = lines.value.find(item => item.type == condition.type)
+
+                getWidgetShiftStyle(key, condition)
+                console.log('getWidgetShiftStyle(key, condition)', getWidgetShiftStyle(key, condition));
+                // 对齐吸附
+                setCurrWidgetStyle(getWidgetShiftStyle(key, condition))
 
                 line.show = true
                 line.style[key] = `${condition.lineShift}px`
@@ -72,11 +93,18 @@ function detectionSubLine() {
     });
 }
 
+// 隐藏辅助线
 function hideSubLine() {
     lines.value.forEach(line => {
         line.show = false
         line.style = {}
     });
+}
+
+function getWidgetShiftStyle(key: string, condition: Condition) {
+    return {
+        top: condition.lineShift
+    }
 }
 
 function isNearly(dragValue: number, targetValue: number) {
@@ -85,5 +113,6 @@ function isNearly(dragValue: number, targetValue: number) {
 
 export const useSubLine = (() => ({
     lines,
-    detectionSubLine
+    detectionSubLine,
+    hideSubLine
 }))
