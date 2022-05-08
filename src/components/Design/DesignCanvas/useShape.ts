@@ -2,17 +2,19 @@ import { defineEmits } from "vue";
 import { WidgetStyle } from "@/types/widget";
 import { getCommonStyle } from "@/utils//style.ts";
 import { useActiontore } from "@/store/action.ts";
+import { useSubLine } from './useSubLine'
 
 
 export function useShape(emits: any) {
   const { closeAction } = useActiontore();
-
+  const { detectionSubLine } = useSubLine()
 
   // 移动 shape
   function handleMoveShape(e: any, widgetStyle: WidgetStyle) {
     e.preventDefault();
     e.stopPropagation();
 
+    // 关闭菜单
     closeAction()
 
     const { top: widgetY, left: widgetX } = widgetStyle;
@@ -25,6 +27,9 @@ export function useShape(emits: any) {
       let top = currY - startY + Number(widgetY);
 
       emits("update:widgetStyle", { ...widgetStyle, ...{ top, left } });
+
+      // 开启辅助线检查
+      detectionSubLine()
     };
 
     const up = () => {

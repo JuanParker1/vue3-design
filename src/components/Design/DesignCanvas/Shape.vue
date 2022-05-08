@@ -20,6 +20,7 @@
         @mousedown="handleShrinkShape($event, item, props.widgetStyle)"
       ></div>
     </template>
+
   </div>
 </template>
 

@@ -5,7 +5,7 @@ export function useCanvas(contentMeauRef: any, canvasRef: any) {
   const { openAction, closeAction } = useActiontore();
 
 
-  function handleContextMenu(e: any) {
+  function handleActionMenu(e: any) {
     console.log('e', e);
     e.stopPropagation();
     e.preventDefault();
@@ -31,7 +31,7 @@ export function useCanvas(contentMeauRef: any, canvasRef: any) {
   }
 
   return {
-    handleContextMenu,
+    handleActionMenu,
     handleDesignContainer
   };
 }

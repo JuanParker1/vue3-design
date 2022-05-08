@@ -12,7 +12,7 @@
     @drop="handleDrop($event, canvasRef)"
     @click="handleDesignContainer"
   >
-    <div class="design-shell" ref="canvasRef" @contextmenu="handleContextMenu">
+    <div class="design-shell" ref="canvasRef" @contextmenu="handleActionMenu">
       <Shape
         v-for="(item, index) in widgetList"
         v-model:widgetStyle="item.style"
@@ -24,7 +24,11 @@
         <component class="design-shell-widget" :is="item.component" />
       </Shape>
 
-      <ContextMenu ref="contentMeauRef"></ContextMenu>
+      <!-- 右键行动菜单 -->
+      <ActionMenu ref="contentMeauRef"></ActionMenu>
+
+      <!-- 辅助线 -->
+      <SubLine></SubLine>
     </div>
   </div>
 </template>
@@ -35,14 +39,15 @@ import { onMounted, provide } from "vue-demi";
 import { useDesignStore } from "@/store/design.ts";
 import { useCanvas } from "./useCanvas";
 import Shape from "./Shape.vue";
-import ContextMenu from "./ContextMenu.vue";
+import ActionMenu from "./ActionMenu.vue";
+import SubLine from "./SubLine.vue";
 
 const { widgetList, curWidget } = toRefs(useDesignStore());
 const { handleDrop, handleDragOver } = useDesignStore();
 
 const canvasRef = ref<HTMLElement | null>(null);
 const contentMeauRef = ref<HTMLElement | null>(null);
-const { handleContextMenu, handleDesignContainer } = useCanvas(
+const { handleActionMenu, handleDesignContainer } = useCanvas(
   contentMeauRef,
   canvasRef
 );
