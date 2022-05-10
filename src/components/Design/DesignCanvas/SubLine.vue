@@ -1,11 +1,10 @@
 <template>
   <ul class="sub-line">
     <li
-      class="sub-line-item"
-      :class="line.type.includes('x') ? 'xline' : 'yline'"
       :style="line.style"
+      class="sub-line-item"
+      :class="line.type == 'x' ? 'xline' : 'yline'"
       v-for="(line, index) in lines"
-      v-show="line.show"
       :key="index"
     ></li>
   </ul>
@@ -24,16 +23,25 @@ const { lines } = useSubLine();
     z-index: 1000;
   }
 
-  .xline {
-    width: 100%;
-    height: 1px;
-    border-top: 1px dashed #ff6e7b;
+  .yline {
+    background-image: linear-gradient(
+      to right,
+      #ff6e7b 35%,
+      rgba(255, 255, 255, 0) 0%
+    ); /* 35%设置虚线点x轴上的长度 */
+    background-position: bottom; /* top配置上边框位置的虚线 */
+    background-size: 10px 1px; /* 第一个参数设置虚线点的间距；第二个参数设置虚线点y轴上的长度 */
+    background-repeat: repeat-x;
   }
 
-  .yline {
-    width: 1px;
-    height: 100%;
-    border-left: 1px dashed #ff6e7b;
+  .xline {
+    background-image: linear-gradient(
+      #ff6e7b 35%,
+      rgba(255, 255, 255, 0) 0%
+    ); /* 35%设置虚线点y轴上的长度 */
+    background-position: left; /* right配置右边框位置的虚线 */
+    background-size: 1px 10px; /* 第一个参数设置虚线点x轴上的长度；第二个参数设置虚线点的间距 */
+    background-repeat: repeat-y;
   }
 }
 </style>

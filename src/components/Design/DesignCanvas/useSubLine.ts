@@ -1,163 +1,163 @@
 import { ref, toRef, toRefs } from "vue";
 import { useDesignStore } from "@/store/design";
+import { getCommonStyle } from "@/utils//style.ts";
+
 
 interface SubLine {
-  type: string;
-  show: boolean;
-  style: { [key: string]: any };
+    type: string,
+    style: {
+        top: number,
+        left: number,
+        height: number,
+        width: number
+    }
 }
 
-interface Condition {
-  isNearly: boolean;
-  type: string;
-  lineShift: number;
+interface LineShape {
+    top: number,
+    left: number,
+    height: number,
+    width: number
+    bottom: number,
+    right: number,
+    centerX: number,
+    centerY: number
 }
 
-interface Conditions {
-  top: Condition[];
-  left: Condition[];
-}
-
-let c = {
-  name: "123",
-};
-
-const lines = ref<SubLine[]>([
-  { type: "xt", show: false, style: {} },
-  { type: "xc", show: false, style: {} },
-  { type: "xb", show: false, style: {} },
-  { type: "yl", show: false, style: {} },
-  { type: "yc", show: false, style: {} },
-  { type: "yr", show: false, style: {} },
-]);
-
-const diff: number = 5;
+const diff: number = 6;
+const lines = ref<SubLine[]>([]);
 
 const { widgetList, curWidget } = toRefs(useDesignStore());
 const { setCurrWidgetStyle } = useDesignStore();
 
-function detectionSubLine1() {
-  hideSubLine();
-  widgetList.value.forEach((widget) => {
-    if (widget.id == curWidget.value.id) return;
-
-    let { top, left, width, height } = widget.style;
-    const right = left + width;
-    const bottom = top + height;
-
-    let {
-      top: currTop,
-      left: currLeft,
-      width: currWidth,
-      height: currHeight,
-    } = curWidget.value.style;
-    const currRight = currLeft + currWidth;
-    const currBottom = currTop + currHeight;
-
-    const conditions: Conditions = {
-      top: [
-        {
-          type: "xt",
-          isNearly: isNearly(currTop, top),
-          lineShift: top,
-        },
-        {
-          type: "xt",
-          isNearly: isNearly(currTop, bottom),
-          lineShift: bottom,
-        },
-        {
-          type: "xb",
-          isNearly: isNearly(currBottom, top),
-          lineShift: top,
-        },
-        {
-          type: "xb",
-          isNearly: isNearly(currBottom, bottom),
-          lineShift: bottom,
-        },
-      ],
-      left: [],
-    };
-
-    Object.keys(conditions).forEach((key) => {
-      conditions[key].forEach((condition: Condition) => {
-        if (!condition.isNearly) return;
-
-        const line: SubLine = lines.value.find(
-          (item) => item.type == condition.type
-        ) as SubLine;
-
-        // 对齐吸附
-        lineAdsorb(key, condition);
-
-        line.show = true;
-        line.style[key] = `${condition.lineShift}px`;
-
-        console.log("触发。。");
-        console.log("line", line);
-      });
-    });
-  });
-}
-
+// 移动显示辅助线
 function detectionSubLine() {
-  hideSubLine();
-  let curr = getLineShape(curWidget.value.style);
-  console.log("curr", curr);
+    hideSubLine()
+    let curr = getLineShape(curWidget.value.style);
 
-  widgetList.value
-    .filter((w: any) => w.id != curWidget.value.id)
-    .forEach((item) => {
-      item = getLineShape(item.style);
-      console.log("item", item);
+    widgetList.value
+        .filter((w: any) => w.id != curWidget.value.id)
+        .forEach((w: any) => {
+            let item: any = getLineShape(w.style);
+            let location = ''
 
-      if (isNearly(curr.t, item.t)) {
-      }
-    });
+            // 上下移动，匹配中间辅助线
+            if (location = matchY(curr.centerY, item)) {
+                setCurrWidgetStyle({ top: item[location] - curr.height / 2 })
+                addLine('y', item[location], Math.min(curr.left, item.left), Math.max(curr.right, item.right))
+                return
+            }
+
+            // 上下移动，匹配上边辅助线
+            if (location = matchY(curr.top, item)) {
+                setCurrWidgetStyle({ top: item[location] })
+                addLine('y', item[location], Math.min(curr.left, item.left), Math.max(curr.right, item.right))
+                return
+            }
+
+            // 上下移动，匹配下边辅助线
+            if (location = matchY(curr.bottom, item)) {
+                setCurrWidgetStyle({ top: item[location] - curr.height })
+                addLine('y', item[location], Math.min(curr.left, item.left), Math.max(curr.right, item.right))
+                return
+            }
+
+            // 左右移动，匹配中间辅助线
+            if (location = matchX(curr.centerX, item)) {
+                setCurrWidgetStyle({ left: item[location] - curr.width / 2 })
+                addLine('x', item[location], Math.min(curr.top, item.top), Math.max(curr.bottom, item.bottom))
+                return
+            }
+
+            // 左右移动，匹配左边辅助线
+            if (location = matchX(curr.left, item)) {
+                setCurrWidgetStyle({ left: item[location] })
+                addLine('x', item[location], Math.min(curr.top, item.top), Math.max(curr.bottom, item.bottom))
+                return
+            }
+
+            // 左右移动，匹配右边辅助线
+            if (location = matchX(curr.right, item)) {
+                setCurrWidgetStyle({ left: item[location] - curr.width })
+                addLine('x', item[location], Math.min(curr.top, item.top), Math.max(curr.bottom, item.bottom))
+                return
+            }
+        });
 }
 
-function getLineShape(style: any) {
-  let { top, left, width, height } = style;
+// 拖拽物料匹配目标物料纵轴对齐点
+function matchY(dragValue: number, target: any) {
+    if (isNearly(dragValue, target.top)) return 'top'
+    if (isNearly(dragValue, target.centerY)) return 'centerY'
+    if (isNearly(dragValue, target.bottom)) return 'bottom'
+    return ''
+}
 
-  return {
-    w: width,
-    h: height,
-    t: top,
-    l: left,
-    b: top + height,
-    r: left + width,
-    lc: top + width / 2,
-    tc: left + height / 2,
-  };
+// 拖拽物料匹配目标物料横轴对齐点
+function matchX(dragValue: number, target: any) {
+    if (isNearly(dragValue, target.left)) return 'left'
+    if (isNearly(dragValue, target.centerX)) return 'centerX'
+    if (isNearly(dragValue, target.right)) return 'right'
+    return ''
+}
+
+// 是否达到吸附范围
+function isNearly(dragValue: number, targetValue: number) {
+    return Math.abs(dragValue - targetValue) <= diff
+}
+
+// 设置物料辅助点位置
+function getLineShape(style: any): LineShape {
+    let { top, left, width, height } = style;
+
+    return {
+        width,
+        height,
+        top,
+        left,
+        bottom: top + height,
+        right: left + width,
+        centerX: left + width / 2,
+        centerY: top + height / 2,
+    };
+}
+
+// 添加辅助线
+function addLine(direction: string, location: number, start: number, end: number) {
+
+    switch (direction) {
+        case 'y':
+            lines.value.push({
+                type: 'y',
+                style: getCommonStyle({
+                    top: location,
+                    left: start,
+                    height: 1,
+                    width: end - start
+                })
+            })
+            break
+        case 'x':
+            lines.value.push({
+                type: 'x',
+                style: getCommonStyle({
+                    top: start,
+                    left: location,
+                    height: end - start,
+                    width: 1
+                })
+            })
+            break
+    }
 }
 
 // 隐藏辅助线
 function hideSubLine() {
-  lines.value.forEach((line) => {
-    line.show = false;
-    line.style = {};
-  });
-}
-
-// 对齐吸附
-function lineAdsorb(key: string, condition: Condition) {
-  console.log("对齐吸附");
-  console.log("key", key);
-
-  //   return {
-  //     top: condition.lineShift,
-  //   };
-
-  //   setCurrWidgetStyle;
-}
-
-function isNearly(dragValue: number, targetValue: number) {
-  return Math.abs(dragValue - targetValue) <= diff;
+    lines.value = []
 }
 
 export const useSubLine = () => ({
-  lines,
-  detectionSubLine,
-  hideSubLine,
+    lines,
+    detectionSubLine,
+    hideSubLine,
 });

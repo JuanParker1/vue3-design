@@ -61,10 +61,8 @@ export const useDesignStore = defineStore({
       Object.keys(style).forEach(key => {
         this.curWidget.style[key] = style[key]
       })
-      console.log('setCurrWidgetStyle');
-      console.log(this.curWidget.style);
-      
-      
+      // console.log('setCurrWidgetStyle');
+      // console.log(this.curWidget.style);
     }
   },
 });
