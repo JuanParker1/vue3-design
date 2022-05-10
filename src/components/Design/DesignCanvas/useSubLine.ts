@@ -1,4 +1,4 @@
-import { ref, toRefs } from "vue";
+import { ref, toRef, toRefs } from "vue";
 import { useDesignStore } from "@/store/design";
 
 interface SubLine {
@@ -19,8 +19,8 @@ interface Conditions {
 }
 
 let c = {
-    name:"123"
-}
+  name: "123",
+};
 
 const lines = ref<SubLine[]>([
   { type: "xt", show: false, style: {} },
@@ -36,7 +36,7 @@ const diff: number = 5;
 const { widgetList, curWidget } = toRefs(useDesignStore());
 const { setCurrWidgetStyle } = useDesignStore();
 
-function detectionSubLine() {
+function detectionSubLine1() {
   hideSubLine();
   widgetList.value.forEach((widget) => {
     if (widget.id == curWidget.value.id) return;
@@ -45,32 +45,35 @@ function detectionSubLine() {
     const right = left + width;
     const bottom = top + height;
 
+    let {
+      top: currTop,
+      left: currLeft,
+      width: currWidth,
+      height: currHeight,
+    } = curWidget.value.style;
+    const currRight = currLeft + currWidth;
+    const currBottom = currTop + currHeight;
+
     const conditions: Conditions = {
       top: [
         {
-          isNearly: isNearly(curWidget.value.style.top, top),
           type: "xt",
+          isNearly: isNearly(currTop, top),
           lineShift: top,
         },
         {
-          isNearly: isNearly(curWidget.value.style.top, bottom),
           type: "xt",
+          isNearly: isNearly(currTop, bottom),
           lineShift: bottom,
         },
         {
-          isNearly: isNearly(
-            curWidget.value.style.top + curWidget.value.style.height,
-            top
-          ),
           type: "xb",
+          isNearly: isNearly(currBottom, top),
           lineShift: top,
         },
         {
-          isNearly: isNearly(
-            curWidget.value.style.top + curWidget.value.style.height,
-            bottom
-          ),
           type: "xb",
+          isNearly: isNearly(currBottom, bottom),
           lineShift: bottom,
         },
       ],
@@ -80,18 +83,13 @@ function detectionSubLine() {
     Object.keys(conditions).forEach((key) => {
       conditions[key].forEach((condition: Condition) => {
         if (!condition.isNearly) return;
-        
+
         const line: SubLine = lines.value.find(
           (item) => item.type == condition.type
-        ) as SubLine
+        ) as SubLine;
 
-        getWidgetShiftStyle(key, condition);
-        console.log(
-          "getWidgetShiftStyle(key, condition)",
-          getWidgetShiftStyle(key, condition)
-        );
         // 对齐吸附
-        setCurrWidgetStyle(getWidgetShiftStyle(key, condition));
+        lineAdsorb(key, condition);
 
         line.show = true;
         line.style[key] = `${condition.lineShift}px`;
@@ -103,6 +101,37 @@ function detectionSubLine() {
   });
 }
 
+function detectionSubLine() {
+  hideSubLine();
+  let curr = getLineShape(curWidget.value.style);
+  console.log("curr", curr);
+
+  widgetList.value
+    .filter((w: any) => w.id != curWidget.value.id)
+    .forEach((item) => {
+      item = getLineShape(item.style);
+      console.log("item", item);
+
+      if (isNearly(curr.t, item.t)) {
+      }
+    });
+}
+
+function getLineShape(style: any) {
+  let { top, left, width, height } = style;
+
+  return {
+    w: width,
+    h: height,
+    t: top,
+    l: left,
+    b: top + height,
+    r: left + width,
+    lc: top + width / 2,
+    tc: left + height / 2,
+  };
+}
+
 // 隐藏辅助线
 function hideSubLine() {
   lines.value.forEach((line) => {
@@ -111,10 +140,16 @@ function hideSubLine() {
   });
 }
 
-function getWidgetShiftStyle(key: string, condition: Condition) {
-  return {
-    top: condition.lineShift,
-  };
+// 对齐吸附
+function lineAdsorb(key: string, condition: Condition) {
+  console.log("对齐吸附");
+  console.log("key", key);
+
+  //   return {
+  //     top: condition.lineShift,
+  //   };
+
+  //   setCurrWidgetStyle;
 }
 
 function isNearly(dragValue: number, targetValue: number) {
