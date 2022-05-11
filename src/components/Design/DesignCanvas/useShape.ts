@@ -2,12 +2,12 @@ import { defineEmits } from "vue";
 import { WidgetStyle } from "@/types/widget";
 import { getCommonStyle } from "@/utils//style.ts";
 import { useActiontore } from "@/store/action.ts";
-import { useSubLine } from './useSubLine'
+import { useMarkLine } from './useMarkLine'
 import { useDesignStore } from "@/store/design.ts";
 
 export function useShape(emits: any) {
   const { closeAction } = useActiontore();
-  const { detectionSubLine, hideSubLine } = useSubLine()
+  const { detectionMarkLine, hideMarkLine } = useMarkLine()
   const { setCurrWidget } = useDesignStore();
 
   // 移动 shape
@@ -32,13 +32,13 @@ export function useShape(emits: any) {
       emits("update:widgetStyle", { ...widgetStyle, ...{ top, left } });
 
       // 开启辅助线检查
-      detectionSubLine()
+      detectionMarkLine()
     };
 
     const up = () => {
       document.removeEventListener("mousemove", move);
       document.removeEventListener("mouseup", up);
-      hideSubLine()
+      hideMarkLine()
     };
 
     document.addEventListener("mousemove", move);

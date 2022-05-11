@@ -1,8 +1,8 @@
 <template>
-  <ul class="sub-line">
+  <ul class="mark-line">
     <li
       :style="line.style"
-      class="sub-line-item"
+      class="mark-line-item"
       :class="line.type == 'x' ? 'xline' : 'yline'"
       v-for="(line, index) in lines"
       :key="index"
@@ -11,14 +11,14 @@
 </template>
 
 <script lang="ts" setup>
-import { useSubLine } from "./useSubLine";
+import { useMarkLine } from "./useMarkLine";
 
-const { lines } = useSubLine();
+const { lines } = useMarkLine();
 </script>
 
 <style lang="scss" scoped>
-.sub-line {
-  .sub-line-item {
+.mark-line {
+  .mark-line-item {
     position: absolute;
     z-index: 1000;
   }

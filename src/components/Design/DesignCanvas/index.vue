@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-07 17:14:37
+ * @LastEditTime: 2022-05-11 11:27:01
 -->
 <template>
   <div
@@ -28,7 +28,7 @@
       <ActionMenu ref="contentMeauRef"></ActionMenu>
 
       <!-- 辅助线 -->
-      <SubLine></SubLine>
+      <MarkLine></MarkLine>
     </div>
   </div>
 </template>
@@ -40,7 +40,7 @@ import { useDesignStore } from "@/store/design.ts";
 import { useCanvas } from "./useCanvas";
 import Shape from "./Shape.vue";
 import ActionMenu from "./ActionMenu.vue";
-import SubLine from "./SubLine.vue";
+import MarkLine from "./MarkLine.vue";
 
 const { widgetList, curWidget } = toRefs(useDesignStore());
 const { handleDrop, handleDragOver } = useDesignStore();

@@ -3,7 +3,7 @@ import { useDesignStore } from "@/store/design";
 import { getCommonStyle } from "@/utils//style.ts";
 
 
-interface SubLine {
+interface MarkLine {
     type: string,
     style: {
         top: number,
@@ -25,14 +25,14 @@ interface LineShape {
 }
 
 const diff: number = 6;
-const lines = ref<SubLine[]>([]);
+const lines = ref<MarkLine[]>([]);
 
 const { widgetList, curWidget } = toRefs(useDesignStore());
 const { setCurrWidgetStyle } = useDesignStore();
 
 // 移动显示辅助线
-function detectionSubLine() {
-    hideSubLine()
+function detectionMarkLine() {
+    hideMarkLine()
     let curr = getLineShape(curWidget.value.style);
 
     widgetList.value
@@ -152,12 +152,12 @@ function addLine(direction: string, location: number, start: number, end: number
 }
 
 // 隐藏辅助线
-function hideSubLine() {
+function hideMarkLine() {
     lines.value = []
 }
 
-export const useSubLine = () => ({
+export const useMarkLine = () => ({
     lines,
-    detectionSubLine,
-    hideSubLine,
+    detectionMarkLine,
+    hideMarkLine,
 });
