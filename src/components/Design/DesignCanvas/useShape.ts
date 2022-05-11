@@ -11,6 +11,7 @@ export function useShape(emits: any) {
   const { detectionMarkLine, hideMarkLine } = useMarkLine();
   const { setCurrWidget } = useDesignStore();
   const { canvasRect } = toRefs(useCanvas());
+  const diff: number = 2; // 旋转吸附角度
   let showRotateValue = ref(false);
 
   // 移动 shape
@@ -138,9 +139,11 @@ export function useShape(emits: any) {
       const rotateAfter =
         Math.atan2(currY - centerY, currX - centerX) / (Math.PI / 180);
 
+      let standarRotate = getStandarRotate(rotate + rotateAfter - rotateBefore);
+
       emits("update:widgetStyle", {
         ...widgetStyle,
-        ...{ rotate: rotate + rotateAfter - rotateBefore },
+        ...{ rotate: standarRotate },
       });
     };
 
@@ -158,6 +161,38 @@ export function useShape(emits: any) {
   function getShapeStyle(widgetStyle: WidgetStyle) {
     let { rotate, top, left, width, height } = widgetStyle;
     return getCommonStyle({ rotate, top, left, width, height });
+  }
+
+  // 定义平台标准旋转角度（顺时针0-360°）
+  function getStandarRotate(rotate: number) {
+    // 如果旋转大于等于360°，减去360°
+    rotate = rotate >= 360 ? rotate - 360 : rotate;
+    // 设置标准角度
+    let result = rotate < -180 ? rotate + 360 : rotate;
+    // 吸附
+    return isNearly(result);
+  }
+
+  // 是否达到旋转角度吸附范围
+  function isNearly(target: number) {
+    // 吸附0°
+    if (Math.abs(target - 0) <= diff) {
+      return 0;
+    }
+    // 吸附90°
+    if (Math.abs(target - 90) <= diff) {
+      return 90;
+    }
+    // 吸附-180°
+    if (180 - target <= diff || Math.abs(-180 - target) <= diff) {
+      return -180;
+    }
+    // 吸附-90°
+    if (Math.abs(target - -90) <= diff) {
+      return -90;
+    }
+
+    return target;
   }
 
   return {
