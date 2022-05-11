@@ -2,12 +2,21 @@
   <div
     class="shape"
     :style="getShapeStyle(props.widgetStyle)"
-    @mousedown="handleMoveShape($event,props.id, props.widgetStyle)"
+    @mousedown="handleMoveShape($event, props.id, props.widgetStyle)"
   >
     <div class="shape-mask" :id="id"></div>
 
     <slot></slot>
 
+    <div
+      class="shape-rotate"
+      @mousedown="handleRotateShape($event, props.widgetStyle)"
+    >
+      <img src="https://s.tuguaishou.com/site/editor/assetRotate.svg" />
+      <span v-show="showRotateValue" class="shape-rotat-val">{{
+        Math.round(props.widgetStyle.rotate)
+      }}°</span>
+    </div>
     <template v-if="active">
       <div class="shape-line"></div>
       <div
@@ -19,7 +28,6 @@
         @mousedown="handleShrinkShape($event, item, props.widgetStyle)"
       ></div>
     </template>
-
   </div>
 </template>
 
@@ -48,10 +56,12 @@ const emits = defineEmits(["update:widgetStyle"]);
 const { setCurrWidget } = useDesignStore();
 
 const {
-  handleMoveShape,
-  getShapePonitStyle,
-  handleShrinkShape,
+  showRotateValue,
   getShapeStyle,
+  getShapePonitStyle,
+  handleMoveShape,
+  handleShrinkShape,
+  handleRotateShape,
 } = useShape(emits);
 </script>
 
@@ -70,6 +80,30 @@ const {
     top: 0px;
     left: 0px;
     z-index: 10000;
+  }
+  .shape-rotate {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    z-index: 4;
+    margin: 14px 0 0 -11px;
+
+    .shape-rotat-val {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      height: 28px;
+      padding: 0 8px;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 28px;
+      color: #fff;
+      background: #0e1217;
+      border-radius: 4px;
+      -webkit-transform: translateX(-50%);
+      transform: translateX(-50%);
+    }
   }
 
   .shape-line {

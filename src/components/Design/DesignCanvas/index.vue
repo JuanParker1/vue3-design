@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-11 11:27:01
+ * @LastEditTime: 2022-05-11 15:23:39
 -->
 <template>
   <div
@@ -43,14 +43,16 @@ import ActionMenu from "./ActionMenu.vue";
 import MarkLine from "./MarkLine.vue";
 
 const { widgetList, curWidget } = toRefs(useDesignStore());
-const { handleDrop, handleDragOver } = useDesignStore();
+const { handleDrop, handleDragOver, initCanvaConfig } = useDesignStore();
 
 const canvasRef = ref<HTMLElement | null>(null);
 const contentMeauRef = ref<HTMLElement | null>(null);
-const { handleActionMenu, handleDesignContainer } = useCanvas(
-  contentMeauRef,
-  canvasRef
-);
+const { setCanvasRect, handleActionMenu, handleDesignContainer } = useCanvas();
+
+// 渲染后，设置canvasRef
+onMounted(() => {
+  setCanvasRect(canvasRef);
+});
 </script>
 
 <style lang="scss" scoped>

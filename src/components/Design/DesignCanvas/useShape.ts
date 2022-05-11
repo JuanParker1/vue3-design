@@ -1,24 +1,27 @@
-import { defineEmits } from "vue";
+import { defineEmits, ref, toRefs } from "vue";
 import { WidgetStyle } from "@/types/widget";
 import { getCommonStyle } from "@/utils//style.ts";
 import { useActiontore } from "@/store/action.ts";
-import { useMarkLine } from './useMarkLine'
+import { useMarkLine } from "./useMarkLine";
 import { useDesignStore } from "@/store/design.ts";
+import { useCanvas } from "./useCanvas";
 
 export function useShape(emits: any) {
   const { closeAction } = useActiontore();
-  const { detectionMarkLine, hideMarkLine } = useMarkLine()
+  const { detectionMarkLine, hideMarkLine } = useMarkLine();
   const { setCurrWidget } = useDesignStore();
+  const { canvasRect } = toRefs(useCanvas());
+  let showRotateValue = ref(false);
 
   // 移动 shape
   function handleMoveShape(e: any, id: string, widgetStyle: WidgetStyle) {
     e.preventDefault();
     e.stopPropagation();
 
-    setCurrWidget(id)
+    setCurrWidget(id);
 
     // 关闭菜单
-    closeAction()
+    closeAction();
 
     const { top: widgetY, left: widgetX } = widgetStyle;
     const { clientX: startX, clientY: startY } = e;
@@ -32,13 +35,13 @@ export function useShape(emits: any) {
       emits("update:widgetStyle", { ...widgetStyle, ...{ top, left } });
 
       // 开启辅助线检查
-      detectionMarkLine()
+      detectionMarkLine();
     };
 
     const up = () => {
       document.removeEventListener("mousemove", move);
       document.removeEventListener("mouseup", up);
-      hideMarkLine()
+      hideMarkLine();
     };
 
     document.addEventListener("mousemove", move);
@@ -79,11 +82,7 @@ export function useShape(emits: any) {
   }
 
   // 改变 shape 大小
-  function handleShrinkShape(
-    e: any,
-    point: string,
-    widgetStyle: WidgetStyle
-  ) {
+  function handleShrinkShape(e: any, point: string, widgetStyle: WidgetStyle) {
     const downEvent = window.event;
     e.stopPropagation();
     e.preventDefault();
@@ -119,10 +118,54 @@ export function useShape(emits: any) {
     document.addEventListener("mouseup", up);
   }
 
-  function getShapeStyle(widgetStyle: WidgetStyle) {
-    let { top, left, width, height } = widgetStyle
-    return getCommonStyle({ top, left, width, height })
+  // 旋转 shape
+  function handleRotateShape(e: any, widgetStyle: WidgetStyle) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const { clientX: startX, clientY: startY } = e;
+    const { rotate, top: widgetY, left: widgetX, width, height } = widgetStyle;
+    const centerX = widgetX + width / 2 + canvasRect.value.x;
+    const centerY = widgetY + height / 2 + canvasRect.value.y;
+
+    const move = (moveEvent: any) => {
+      let { clientX: currX, clientY: currY } = moveEvent;
+
+      // 旋转前的角度
+      const rotateBefore =
+        Math.atan2(startY - centerY, startX - centerX) / (Math.PI / 180);
+      // 旋转后的角度
+      const rotateAfter =
+        Math.atan2(currY - centerY, currX - centerX) / (Math.PI / 180);
+
+      emits("update:widgetStyle", {
+        ...widgetStyle,
+        ...{ rotate: rotate + rotateAfter - rotateBefore },
+      });
+    };
+
+    const up = () => {
+      showRotateValue.value = false;
+      document.removeEventListener("mousemove", move);
+      document.removeEventListener("mouseup", up);
+    };
+
+    showRotateValue.value = true;
+    document.addEventListener("mousemove", move);
+    document.addEventListener("mouseup", up);
   }
 
-  return { handleMoveShape, getShapePonitStyle, handleShrinkShape, getShapeStyle };
+  function getShapeStyle(widgetStyle: WidgetStyle) {
+    let { rotate, top, left, width, height } = widgetStyle;
+    return getCommonStyle({ rotate, top, left, width, height });
+  }
+
+  return {
+    showRotateValue,
+    getShapeStyle,
+    getShapePonitStyle,
+    handleMoveShape,
+    handleRotateShape,
+    handleShrinkShape,
+  };
 }
