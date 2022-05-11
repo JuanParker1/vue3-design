@@ -84,30 +84,61 @@ export function useShape(emits: any) {
 
   // 改变 shape 大小
   function handleShrinkShape(e: any, point: string, widgetStyle: WidgetStyle) {
-    const downEvent = window.event;
     e.stopPropagation();
     e.preventDefault();
 
-    let pot = { ...widgetStyle };
-    const { clientX: startX, clientY: startY } = e;
+    let { x: canvasX, y: canvasY } = canvasRect.value as any;
+    const { rotate, top: widgetY, left: widgetX, width, height } = widgetStyle;
+    const startX = e.clientX - canvasX;
+    const startY = e.clientY - canvasY;
+
+    // 物料初始中心点
+    const centerPoint = {
+      x: widgetX + width / 2,
+      y: widgetY + width / 2,
+    };
+
+    // 对称点
+    const symmetricPoint = {
+      x: centerPoint.x - (startX - centerPoint.x),
+      y: centerPoint.y - (startY - centerPoint.y),
+    };
 
     const move = (moveEvent: any) => {
-      const { clientX: currX, clientY: currY } = moveEvent;
-      const disX = currX - startX;
-      const disY = currY - startY;
-      const haveT = /t/.test(point);
-      const haveR = /r/.test(point);
-      const haveB = /b/.test(point);
-      const haveL = /l/.test(point);
-      const height = pot.height + (haveT ? -disY : haveB ? disY : 0);
-      const width = pot.width + (haveL ? -disX : haveR ? disX : 0);
-      const left = pot.left + (haveL ? disX : 0);
-      const top = pot.top + (haveT ? disY : 0);
+      const cuurPoint = {
+        x: moveEvent.clientX - canvasX,
+        y: moveEvent.clientY - canvasY,
+      };
 
-      emits("update:widgetStyle", {
-        ...widgetStyle,
-        ...{ top, left, height, width },
-      });
+      const curCenterPoint = {
+        x: cuurPoint.x + (cuurPoint.x + symmetricPoint.x) / 2,
+        y: cuurPoint.y + (cuurPoint.y + symmetricPoint.y) / 2,
+      };
+      const newTopLeftPoint = calculateRotatedPointCoordinate(
+        cuurPoint,
+        curCenterPoint,
+        -rotate
+      );
+      const newBottomRightPoint = calculateRotatedPointCoordinate(
+        symmetricPoint,
+        curCenterPoint,
+        -rotate
+      );
+
+      const newWidth = newBottomRightPoint.x - newTopLeftPoint.x;
+      const newHeight = newBottomRightPoint.y - newTopLeftPoint.y;
+
+      if (newWidth > 0 && newHeight > 0) {
+        emits("update:widgetStyle", {
+          ...widgetStyle,
+          ...{
+            width: Math.round(newWidth),
+            height: Math.round(newHeight),
+            left: Math.round(newTopLeftPoint.x),
+            top: Math.round(newTopLeftPoint.y),
+          },
+        });
+      }
     };
 
     const up = () => {
@@ -118,6 +149,25 @@ export function useShape(emits: any) {
     document.addEventListener("mousemove", move);
     document.addEventListener("mouseup", up);
   }
+
+  function calculateRotatedPointCoordinate(point, center, rotate) {
+    return {
+      x:
+        (point.x - center.x) * Math.cos(angleToRadian(rotate)) -
+        (point.y - center.y) * Math.sin(angleToRadian(rotate)) +
+        center.x,
+      y:
+        (point.x - center.x) * Math.sin(angleToRadian(rotate)) +
+        (point.y - center.y) * Math.cos(angleToRadian(rotate)) +
+        center.y,
+    };
+  }
+
+  function angleToRadian(angle) {
+    return (angle * Math.PI) / 180;
+  }
+
+  // -------------------------------------
 
   // 旋转 shape
   function handleRotateShape(e: any, widgetStyle: WidgetStyle) {

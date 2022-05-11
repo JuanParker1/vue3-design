@@ -8,17 +8,19 @@
 
     <slot></slot>
 
-    <div
-      class="shape-rotate"
-      @mousedown="handleRotateShape($event, props.widgetStyle)"
-    >
-      <img src="https://s.tuguaishou.com/site/editor/assetRotate.svg" />
-      <span v-show="showRotateValue" class="shape-rotat-val">{{
-        Math.round(props.widgetStyle.rotate)
-      }}°</span>
-    </div>
     <template v-if="active">
-      <div class="shape-line"></div>
+      <!-- 旋转按钮 -->
+      <div
+        class="shape-rotate"
+        @mousedown="handleRotateShape($event, props.widgetStyle)"
+      >
+        <img src="https://s.tuguaishou.com/site/editor/assetRotate.svg" />
+        <span v-show="showRotateValue" class="shape-rotat-val"
+          >{{ Math.round(props.widgetStyle.rotate) }}°</span
+        >
+      </div>
+
+      <!-- 操作圆点 -->
       <div
         v-for="(item, index) in pointList"
         :key="index"
@@ -27,6 +29,8 @@
         :style="getShapePonitStyle(item, props.widgetStyle)"
         @mousedown="handleShrinkShape($event, item, props.widgetStyle)"
       ></div>
+
+      <div class="shape-line"></div>
     </template>
   </div>
 </template>
