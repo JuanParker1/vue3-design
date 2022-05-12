@@ -1,9 +1,9 @@
 import { useDesignStore } from "@/store/design.ts";
-import { useActiontore } from "@/store/action.ts";
+import { useAction } from "./useAction";
 import { ref } from "vue";
 
 let canvasRect = ref({});
-const { openAction, closeAction } = useActiontore();
+const { openAction, closeAction } = useAction();
 
 export function setCanvasRect(canvasRef: any) {
   canvasRect.value = canvasRef.value.getBoundingClientRect();

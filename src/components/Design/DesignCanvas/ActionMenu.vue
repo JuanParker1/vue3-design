@@ -2,7 +2,7 @@
   <ul v-show="actionShow" class="action" :style="getCommonStyle(actionStyle)">
     <li
       class="action-item"
-      v-for="(action, index) in actionCollection"
+      v-for="(action, index) in actionList"
       :key="index"
       @click="action.actionFun"
     >
@@ -13,23 +13,10 @@
 
 <script setup lang='ts'>
 import { ref, toRefs } from "vue-demi";
-import { getCommonStyle } from "@/utils//style.ts";
-import { useActiontore } from "@/store/action.ts";
+import { getCommonStyle } from "@/utils/style.ts";
+import { useAction } from "./useAction";
 
-let location = ref({});
-
-const { up, down, bottom, top } = useActiontore();
-const { actionShow, actionStyle } = toRefs(useActiontore());
-
-const actionCollection = [
-  { label: "复制", shortcuts: ["Ctrl", "C"], actionFun: "copy" },
-  { label: "复制", shortcuts: ["Ctrl", "C"], actionFun: "shear" },
-  { label: "粘贴", shortcuts: ["Ctrl", "V"], actionFun: "paste" },
-  { label: "置顶", shortcuts: ["Ctrl", "-"], actionFun: top },
-  { label: "上移一层", shortcuts: ["Ctrl", "+"], actionFun: up },
-  { label: "下移一层", shortcuts: ["Ctrl", "-"], actionFun: down },
-  { label: "置底", shortcuts: ["Ctrl", "-"], actionFun: bottom },
-];
+const { actionList, actionShow, actionStyle } = toRefs(useAction());
 </script>
 
 <style lang="scss" scoped>

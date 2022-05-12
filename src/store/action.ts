@@ -12,7 +12,7 @@ interface ActionStyle {
     left?: Number
 }
 
-export const useActiontore = defineStore({
+export const useAction = defineStore({
     id: 'app-action',
     state: (): ActionState => {
         return {

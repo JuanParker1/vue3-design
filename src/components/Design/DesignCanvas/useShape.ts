@@ -1,14 +1,14 @@
 import { defineEmits, ref, toRefs } from "vue";
 import { WidgetStyle } from "@/types/widget";
 import { getCommonStyle } from "@/utils//style.ts";
-import { useActiontore } from "@/store/action.ts";
+import { useAction } from "./useAction";
 import { useMarkLine } from "./useMarkLine";
 import { useDesignStore } from "@/store/design.ts";
 import { useCanvas } from "./useCanvas";
-import { calculateComponentPositonAndSize } from "./calculateComponentPositonAndSize";
+import { calculateComponentPositonAndSize } from "@/hooks/design/useAnglePositon";
 
 export function useShape(emits: any) {
-  const { closeAction } = useActiontore();
+  const { closeAction } = useAction();
   const { detectionMarkLine, hideMarkLine } = useMarkLine();
   const { setCurrWidget } = useDesignStore();
   const { canvasRect } = toRefs(useCanvas());

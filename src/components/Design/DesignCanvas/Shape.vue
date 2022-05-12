@@ -86,10 +86,10 @@ const {
     top: 0px;
     left: 0px;
     z-index: 10000;
-    // &:hover {
-    //   cursor: move;
-    //   border: 1px solid #ff6e7b;
-    // }
+    &:hover {
+      cursor: move;
+      border: 1px solid #ff6e7b;
+    }
   }
   .shape-rotate {
     position: absolute;
@@ -97,6 +97,10 @@ const {
     left: 50%;
     z-index: 4;
     margin: 14px 0 0 -11px;
+
+    &:hover {
+      cursor: url(https://s.tuguaishou.com/site/editor/hand.png) 8 8, auto;
+    }
 
     .shape-rotat-val {
       position: absolute;

@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 10:58:44
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-07 14:21:25
+ * @LastEditTime: 2022-05-12 19:41:56
 -->
 <template>
   <div class="editor">
@@ -12,7 +12,7 @@
 
     <!-- body -->
     <div class="editor-body">
-      <WidgetList />
+      <DesignWidgets />
       <DesignCanvas />
       <DesignOperator />
     </div>
@@ -21,11 +21,12 @@
 
 <script setup lang="ts">
 import { ref } from "@vue/reactivity";
-import WidgetList from "@/components/Design/DesignWidget.vue";
+import DesignWidgets from "@/components/Design/DesignWidgets.vue";
 import DesignCanvas from "@/components/Design/DesignCanvas/index.vue";
 import DesignOperator from "@/components/Design/DesignOperator.vue";
 
-const y = ref(2);11
+const y = ref(2);
+11;
 </script>
 
 <style lang='scss'>
