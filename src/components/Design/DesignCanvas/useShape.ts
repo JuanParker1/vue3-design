@@ -5,6 +5,7 @@ import { useActiontore } from "@/store/action.ts";
 import { useMarkLine } from "./useMarkLine";
 import { useDesignStore } from "@/store/design.ts";
 import { useCanvas } from "./useCanvas";
+import { calculateComponentPositonAndSize } from "./calculateComponentPositonAndSize";
 
 export function useShape(emits: any) {
   const { closeAction } = useActiontore();
@@ -82,63 +83,68 @@ export function useShape(emits: any) {
     };
   }
 
-  // 改变 shape 大小
+  // 调整 shape 大小
   function handleShrinkShape(e: any, point: string, widgetStyle: WidgetStyle) {
     e.stopPropagation();
     e.preventDefault();
 
-    let { x: canvasX, y: canvasY } = canvasRect.value as any;
-    const { rotate, top: widgetY, left: widgetX, width, height } = widgetStyle;
-    const startX = e.clientX - canvasX;
-    const startY = e.clientY - canvasY;
+    const style = { ...widgetStyle };
 
-    // 物料初始中心点
-    const centerPoint = {
-      x: widgetX + width / 2,
-      y: widgetY + width / 2,
+    // 组件宽高比
+    const proportion = style.width / style.height;
+
+    // 组件中心点
+    const center = {
+      x: style.left + style.width / 2,
+      y: style.top + style.height / 2,
     };
 
-    // 对称点
+    // 获取画布位移信息
+    const { x: canvasX, y: canvasY } = canvasRect.value as any;
+
+    // 当前点击坐标
+    const curPoint = {
+      x: e.clientX - canvasX,
+      y: e.clientY - canvasY,
+    };
+
+    // 获取对称点的坐标
     const symmetricPoint = {
-      x: centerPoint.x - (startX - centerPoint.x),
-      y: centerPoint.y - (startY - centerPoint.y),
+      x: center.x - (curPoint.x - center.x),
+      y: center.y - (curPoint.y - center.y),
     };
+
+    // 调整直角点时，保持比例改变
+    const keepProportion = point.length == 2;
+    let isFirst = true;
 
     const move = (moveEvent: any) => {
-      const cuurPoint = {
+      // 第一次点击时也会触发 move，所以会有“刚点击组件但未移动，组件的大小却改变了”的情况发生
+      // 因此第一次点击时不触发 move 事件
+      if (isFirst) {
+        isFirst = false;
+        return;
+      }
+
+      const curPositon = {
         x: moveEvent.clientX - canvasX,
         y: moveEvent.clientY - canvasY,
       };
 
-      const curCenterPoint = {
-        x: cuurPoint.x + (cuurPoint.x + symmetricPoint.x) / 2,
-        y: cuurPoint.y + (cuurPoint.y + symmetricPoint.y) / 2,
-      };
-      const newTopLeftPoint = calculateRotatedPointCoordinate(
-        cuurPoint,
-        curCenterPoint,
-        -rotate
-      );
-      const newBottomRightPoint = calculateRotatedPointCoordinate(
-        symmetricPoint,
-        curCenterPoint,
-        -rotate
+      calculateComponentPositonAndSize(
+        point,
+        style,
+        curPositon,
+        proportion,
+        keepProportion,
+        {
+          center,
+          curPoint,
+          symmetricPoint,
+        }
       );
 
-      const newWidth = newBottomRightPoint.x - newTopLeftPoint.x;
-      const newHeight = newBottomRightPoint.y - newTopLeftPoint.y;
-
-      if (newWidth > 0 && newHeight > 0) {
-        emits("update:widgetStyle", {
-          ...widgetStyle,
-          ...{
-            width: Math.round(newWidth),
-            height: Math.round(newHeight),
-            left: Math.round(newTopLeftPoint.x),
-            top: Math.round(newTopLeftPoint.y),
-          },
-        });
-      }
+      emits("update:widgetStyle", { ...widgetStyle, ...style });
     };
 
     const up = () => {
@@ -149,25 +155,6 @@ export function useShape(emits: any) {
     document.addEventListener("mousemove", move);
     document.addEventListener("mouseup", up);
   }
-
-  function calculateRotatedPointCoordinate(point, center, rotate) {
-    return {
-      x:
-        (point.x - center.x) * Math.cos(angleToRadian(rotate)) -
-        (point.y - center.y) * Math.sin(angleToRadian(rotate)) +
-        center.x,
-      y:
-        (point.x - center.x) * Math.sin(angleToRadian(rotate)) +
-        (point.y - center.y) * Math.cos(angleToRadian(rotate)) +
-        center.y,
-    };
-  }
-
-  function angleToRadian(angle) {
-    return (angle * Math.PI) / 180;
-  }
-
-  // -------------------------------------
 
   // 旋转 shape
   function handleRotateShape(e: any, widgetStyle: WidgetStyle) {

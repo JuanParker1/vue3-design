@@ -15,3 +15,8 @@ export interface Widget {
   events: object;
   style: WidgetStyle;
 }
+
+export interface Coordinate {
+  x: number;
+  y: number;
+}
