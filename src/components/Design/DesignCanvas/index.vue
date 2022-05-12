@@ -3,14 +3,14 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-11 15:23:39
+ * @LastEditTime: 2022-05-12 20:51:38
 -->
 <template>
   <div
     class="design-container"
-    @dragover="handleDragOver"
     @drop="handleDrop($event, canvasRef)"
-    @click="handleDesignContainer"
+    @dragover="handleDragOver"
+    @mousedown="handleMouseDown"
   >
     <div class="design-shell" ref="canvasRef" @contextmenu="handleActionMenu">
       <Shape
@@ -30,6 +30,8 @@
       <!-- 辅助线 -->
       <MarkLine></MarkLine>
     </div>
+
+    <Area />
   </div>
 </template>
 
@@ -41,13 +43,14 @@ import { useCanvas } from "./useCanvas";
 import Shape from "./Shape.vue";
 import ActionMenu from "./ActionMenu.vue";
 import MarkLine from "./MarkLine.vue";
+import Area from "./Area.vue";
 
 const { widgetList, curWidget } = toRefs(useDesignStore());
 const { handleDrop, handleDragOver, initCanvaConfig } = useDesignStore();
 
 const canvasRef = ref<HTMLElement | null>(null);
 const contentMeauRef = ref<HTMLElement | null>(null);
-const { setCanvasRect, handleActionMenu, handleDesignContainer } = useCanvas();
+const { setCanvasRect, handleActionMenu, handleMouseDown } = useCanvas();
 
 // 渲染后，设置canvasRef
 onMounted(() => {
