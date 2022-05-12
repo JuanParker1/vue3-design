@@ -44,7 +44,6 @@ function detectionMarkLine() {
 
       // 上下移动，匹配中间辅助线
       if ((location = matchY(curr.centerY, item))) {
-        // setCurrWidgetStyle({ top: item[location] - curr.height / 2 });
         setCurrWidgetStyle({
           top: style.top - NearlyValue(curr.centerY, item[location]),
         });
@@ -88,7 +87,9 @@ function detectionMarkLine() {
 
       // 左右移动，匹配中间辅助线
       if ((location = matchX(curr.centerX, item))) {
-        // setCurrWidgetStyle({ left: item[location] - curr.width / 2 });
+        setCurrWidgetStyle({
+          left: style.left - NearlyValue(curr.centerX, item[location]),
+        });
         addLine(
           "x",
           item[location],
@@ -100,7 +101,9 @@ function detectionMarkLine() {
 
       // 左右移动，匹配左边辅助线
       if ((location = matchX(curr.left, item))) {
-        // setCurrWidgetStyle({ left: item[location] });
+        setCurrWidgetStyle({
+          left: style.left - NearlyValue(curr.left, item[location]),
+        });
         addLine(
           "x",
           item[location],
@@ -112,7 +115,9 @@ function detectionMarkLine() {
 
       // 左右移动，匹配右边辅助线
       if ((location = matchX(curr.right, item))) {
-        // setCurrWidgetStyle({ left: item[location] - curr.width });
+        setCurrWidgetStyle({
+          left: style.left - NearlyValue(curr.right, item[location]),
+        });
         addLine(
           "x",
           item[location],
