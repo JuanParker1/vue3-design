@@ -13,17 +13,18 @@ export function useShape(emits: any) {
   const { setCurrWidget } = useDesignStore();
   const { canvasRect } = toRefs(useCanvas());
   const diff: number = 2; // 旋转吸附角度
-  let showRotateValue = ref(false);
+  let inRotate = ref(false);
+  let inMove = ref(false);
 
   // 移动 shape
   function handleMoveShape(e: any, id: string, widgetStyle: WidgetStyle) {
     e.preventDefault();
     e.stopPropagation();
 
-    setCurrWidget(id);
-
     // 关闭菜单
     closeAction();
+    setCurrWidget(id);
+    inMove.value = true;
 
     const { top: widgetY, left: widgetX } = widgetStyle;
     const { clientX: startX, clientY: startY } = e;
@@ -44,6 +45,7 @@ export function useShape(emits: any) {
       document.removeEventListener("mousemove", move);
       document.removeEventListener("mouseup", up);
       hideMarkLine();
+      inMove.value = false;
     };
 
     document.addEventListener("mousemove", move);
@@ -185,12 +187,12 @@ export function useShape(emits: any) {
     };
 
     const up = () => {
-      showRotateValue.value = false;
+      inRotate.value = false;
       document.removeEventListener("mousemove", move);
       document.removeEventListener("mouseup", up);
     };
 
-    showRotateValue.value = true;
+    inRotate.value = true;
     document.addEventListener("mousemove", move);
     document.addEventListener("mouseup", up);
   }
@@ -233,7 +235,8 @@ export function useShape(emits: any) {
   }
 
   return {
-    showRotateValue,
+    inMove,
+    inRotate,
     getShapeStyle,
     getShapePonitStyle,
     handleMoveShape,

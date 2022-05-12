@@ -3,13 +3,13 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 11:30:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-12 14:42:08
+ * @LastEditTime: 2022-05-12 19:40:08
  */
 export default [
   {
     id: '1',
     component: 'v-text', // 组件名称，需要提前注册到 Vue
-    label: '文字', // 左侧组件列表中显示的名字
+    label: '图片', // 左侧组件列表中显示的名字
     icon: 'el-icon-edit', // 左侧组件列表中显示的名字
     animations: [], // 动画列表
     events: {}, // 事件列表
