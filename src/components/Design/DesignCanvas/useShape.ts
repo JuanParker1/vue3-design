@@ -8,7 +8,7 @@ import { useCanvas } from "./useCanvas";
 import { calculateComponentPositonAndSize } from "@/hooks/design/useAnglePositon";
 
 export function useShape(emits: any) {
-  const { closeAction } = useAction();
+  const { hidenAction } = useAction();
   const { detectionMarkLine, hideMarkLine } = useMarkLine();
   const { setCurrWidget } = useDesignStore();
   const { canvasRect } = toRefs(useCanvas());
@@ -22,7 +22,7 @@ export function useShape(emits: any) {
     e.stopPropagation();
 
     // 关闭菜单
-    closeAction();
+    hidenAction();
     setCurrWidget(id);
     inMove.value = true;
 

@@ -28,7 +28,7 @@ export const useAction = defineStore({
         },
         
         // 关闭行动栏
-        closeAction() {
+        hidenAction() {
             this.actionShow = false
         },
 
@@ -39,7 +39,7 @@ export const useAction = defineStore({
             const curIndex = widgetList.findIndex(w => w.id == curWidget.id)
             if (curIndex < max)
                 swapArray(widgetList, curIndex, curIndex + 1)
-            this.closeAction()
+            this.hidenAction()
         },
 
         // 下移一层
@@ -48,7 +48,7 @@ export const useAction = defineStore({
             const curIndex = widgetList.findIndex(w => w.id == curWidget.id)
             if (curIndex > 0)
                 swapArray(widgetList, curIndex, curIndex - 1)
-            this.closeAction()
+            this.hidenAction()
         },
 
         // 置顶
@@ -57,7 +57,7 @@ export const useAction = defineStore({
             const curIndex = widgetList.findIndex(w => w.id == curWidget.id)
             const curr = widgetList.splice(curIndex, 1)[0]
             widgetList.push(curr)
-            this.closeAction()
+            this.hidenAction()
         },
 
         // 置底
@@ -66,7 +66,7 @@ export const useAction = defineStore({
             const curIndex = widgetList.findIndex(w => w.id == curWidget.id)
             const curr = widgetList.splice(curIndex, 1)[0]
             widgetList.unshift(curr)
-            this.closeAction()
+            this.hidenAction()
         },
     }
 })

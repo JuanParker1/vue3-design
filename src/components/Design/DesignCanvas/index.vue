@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-13 15:41:39
+ * @LastEditTime: 2022-05-13 17:07:02
 -->
 <template>
   <div
@@ -19,7 +19,7 @@
         :key="item.id"
         :id="item.id"
         :zIndex="index"
-        :active="item.id === curWidget.id"
+        :active="curWidget && item.id === curWidget.id"
       >
         <component class="design-shell-widget" :is="item.component" />
       </Shape>
