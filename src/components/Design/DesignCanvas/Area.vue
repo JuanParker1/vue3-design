@@ -1,5 +1,5 @@
 <template>
-  <div class="area" :style="getCommonStyle(areaStyle)"></div>
+  <div class="area" v-show="inArea" :style="getCommonStyle(areaStyle)"></div>
 </template>
 
 <script setup lang='ts'>
@@ -14,6 +14,6 @@ const { inArea, areaStyle } = toRefs(useCanvas());
 .area {
   position: absolute;
   border: solid 1px #ff6e7b;
-  background: #ff6e7b;
+  background: #ff6e7b05;
 }
 </style>

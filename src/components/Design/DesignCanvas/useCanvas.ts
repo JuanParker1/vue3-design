@@ -37,38 +37,40 @@ function handleActionMenu(e: any) {
 function handleMouseDown(e: any) {
   closeAction();
 
-  const { x: canvasX, y: canvasY } = canvasRect.value as any;
   const { clientX: startX, clientY: startY } = e;
 
-  areaStyle.left = startX - canvasX;
-  areaStyle.top = startY - canvasY;
+  areaStyle.value.left = startX;
+  areaStyle.value.top = startY;
   inArea.value = true;
 
   const move = (moveEvent: any) => {
     let { clientX: currX, clientY: currY } = moveEvent;
 
-    areaStyle.width = Math.abs(currX - startX);
-    areaStyle.height = Math.abs(currY - startY);
+    areaStyle.value.width = Math.abs(currX - startX);
+    areaStyle.value.height = Math.abs(currY - startY);
 
     if (currX < startX) {
-      areaStyle.left = currX - canvasX;
+      areaStyle.value.left = currX;
     }
 
-    if (currX < startY) {
-      areaStyle.top = currX - canvasY;
+    if (currY < startY) {
+      areaStyle.value.top = currY;
     }
-
-    console.log("areaStyle", areaStyle);
   };
 
   const up = () => {
-    inArea.value = false;
+    hiddenArea();
     document.removeEventListener("mousemove", move);
     document.removeEventListener("mouseup", up);
   };
 
   document.addEventListener("mousemove", move);
   document.addEventListener("mouseup", up);
+}
+
+function hiddenArea() {
+  inArea.value = false;
+  areaStyle.value = {};
 }
 
 export const useCanvas = () => ({

@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-12 20:51:38
+ * @LastEditTime: 2022-05-13 15:41:39
 -->
 <template>
   <div
@@ -30,9 +30,8 @@
       <!-- 辅助线 -->
       <MarkLine></MarkLine>
     </div>
-
-    <Area />
   </div>
+  <Area />
 </template>
 
 <script setup lang='ts'>
