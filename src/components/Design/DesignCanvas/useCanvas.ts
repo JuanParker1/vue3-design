@@ -31,8 +31,8 @@ function handleActionMenu(e: any) {
   }
 
   openAction({
-    top: currY - canvasX,
-    left: currX - canvasY,
+    left: currX - canvasX,
+    top: currY - canvasY,
   });
 }
 

@@ -28,7 +28,9 @@ const actionList = [
 
 // 打开行动栏
 function openAction(style: ActionStyle) {
+  console.log('打开行动栏');
   actionStyle.value = style;
+  console.log('style', style);
   actionShow.value = true;
 }
 
