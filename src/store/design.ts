@@ -55,8 +55,8 @@ export const useDesignStore = defineStore({
     // 当前操作物料
     setCurrWidget(id: string | undefined) {
       if (id) {
-        console.log('当前操作物料');
-        
+        console.log("当前操作物料");
+
         this.curWidget = this.widgetList.find((w) => w.id == id);
       } else {
         this.curWidget = null;

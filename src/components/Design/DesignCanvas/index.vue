@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-13 17:07:02
+ * @LastEditTime: 2022-05-16 14:42:47
 -->
 <template>
   <div
@@ -13,7 +13,7 @@
     @mousedown="handleMouseDown"
   >
     <div class="design-shell" ref="canvasRef" @contextmenu="handleActionMenu">
-      <Shape
+      <!-- <Shape
         v-for="(item, index) in widgetList"
         v-model:widgetStyle="item.style"
         :key="item.id"
@@ -22,7 +22,8 @@
         :active="curWidget && item.id === curWidget.id"
       >
         <component class="design-shell-widget" :is="item.component" />
-      </Shape>
+      </Shape> -->
+      <DesignWidgetList :list="widgetList"/>
 
       <!-- 右键行动菜单 -->
       <ActionMenu ref="contentMeauRef"></ActionMenu>
@@ -43,6 +44,8 @@ import Shape from "./Shape.vue";
 import ActionMenu from "./ActionMenu.vue";
 import MarkLine from "./MarkLine.vue";
 import Area from "./Area.vue";
+import Group from "./Group.vue";
+import DesignWidgetList from './DesignWidgetList.vue'
 
 const { widgetList, curWidget } = toRefs(useDesignStore());
 const { handleDrop, handleDragOver, initCanvaConfig } = useDesignStore();

@@ -1,4 +1,5 @@
 import { useDesignStore } from "@/store/design.ts";
+import { useGroupStore } from "@/store/group.ts";
 import { useAction } from "./useAction";
 import { ref, toRefs } from "vue";
 import { sin, cos } from "@/utils/index.ts";
@@ -9,6 +10,8 @@ let canvasRect = ref({});
 let areaStyle = ref<any>({});
 const { widgetList } = toRefs(useDesignStore());
 const { setCurrWidget } = useDesignStore();
+const { setGroupWidgets } = useGroupStore();
+let { groupWidgets } = toRefs(useGroupStore());
 const { openAction, hidenAction } = useAction();
 
 export function setCanvasRect(canvasRef: any) {
@@ -76,8 +79,9 @@ function handleMouseDown(e: any) {
 }
 
 function createGroup() {
-  const widgets = WidgetsInGroup();
-  if (!widgets.length) hiddenArea();
+  setGroupWidgets(WidgetsInGroup());
+  console.log("groupWidgets", groupWidgets);
+  if (!groupWidgets.value.length) hiddenArea();
 
   const { x: canvasX, y: canvasY } = canvasRect.value as any;
   let top = Infinity,
@@ -85,7 +89,7 @@ function createGroup() {
   let right = -Infinity,
     bottom = -Infinity;
 
-  widgets.forEach((w) => {
+  groupWidgets.value.forEach((w) => {
     let style;
 
     style = getComponentRotatedStyle(w.style);
@@ -128,7 +132,7 @@ function WidgetsInGroup() {
   });
 }
 
-// 获取一个组件旋转 rotate 后的样式
+// 获取一个物料旋转 rotate 后的样式
 export function getComponentRotatedStyle(style) {
   style = { ...style };
   if (style.rotate != 0) {
