@@ -5,7 +5,6 @@
       v-model:widgetStyle="item.style"
       :key="item.id"
       :id="item.id"
-      :zIndex="index"
     >
       <component class="design-shell-widget" :is="item.component" />
     </Shape>
@@ -14,6 +13,7 @@
 
 <script setup lang='ts'>
 import Shape from "./Shape.vue";
+import { getCommonStyle } from "@/utils/style.ts";
 
 const props = defineProps({
   data: {
@@ -23,4 +23,14 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
+.group {
+  // position: absolute;
+  background: #444972;
+
+  .design-shell-widget {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+}
 </style>

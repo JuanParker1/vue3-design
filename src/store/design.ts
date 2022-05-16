@@ -52,7 +52,7 @@ export const useDesignStore = defineStore({
       }
     },
 
-    // 当前操作物料
+    // 设置当前操作物料
     setCurrWidget(id: string | undefined) {
       if (id) {
         console.log("当前操作物料");
@@ -62,13 +62,21 @@ export const useDesignStore = defineStore({
         this.curWidget = null;
       }
     },
-
+    // 修改当前物料样式
     setCurrWidgetStyle(style: Object) {
       Object.keys(style).forEach((key) => {
         this.curWidget.style[key] = style[key];
       });
       // console.log('setCurrWidgetStyle');
       // console.log(this.curWidget.style);
+    },
+    // 删除物料
+    deleteWidget(target: string | string[]) {
+      if (typeof id == "string") {
+        this.widgetList = this.widgetList.filter((w) => w.id != target);
+      } else {
+        this.widgetList = this.widgetList.filter((w) => !target.includes(w.id));
+      }
     },
   },
 });

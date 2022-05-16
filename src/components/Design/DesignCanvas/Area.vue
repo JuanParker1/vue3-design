@@ -5,9 +5,9 @@
 <script setup lang='ts'>
 import { ref, toRefs } from "vue-demi";
 import { getCommonStyle } from "@/utils/style.ts";
-import { useCanvas } from "./useCanvas";
+import { useGroup } from "./useGroup";
 
-const { inArea, areaStyle } = toRefs(useCanvas());
+const { inArea, areaStyle } = toRefs(useGroup());
 </script>
 
 <style lang="scss" scoped>

@@ -3,17 +3,17 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-16 14:42:47
+ * @LastEditTime: 2022-05-16 17:27:10
 -->
 <template>
   <div
     class="design-container"
     @drop="handleDrop($event, canvasRef)"
     @dragover="handleDragOver"
-    @mousedown="handleMouseDown"
+    @mousedown="selectedArea"
   >
     <div class="design-shell" ref="canvasRef" @contextmenu="handleActionMenu">
-      <!-- <Shape
+      <Shape
         v-for="(item, index) in widgetList"
         v-model:widgetStyle="item.style"
         :key="item.id"
@@ -21,9 +21,13 @@
         :zIndex="index"
         :active="curWidget && item.id === curWidget.id"
       >
-        <component class="design-shell-widget" :is="item.component" />
-      </Shape> -->
-      <DesignWidgetList :list="widgetList"/>
+        <Group
+          v-if="item.component == 'Group'"
+          class="design-shell-widget"
+          :data="item"
+        />
+        <component v-else class="design-shell-widget" :is="item.component" />
+      </Shape>
 
       <!-- 右键行动菜单 -->
       <ActionMenu ref="contentMeauRef"></ActionMenu>
@@ -40,19 +44,21 @@ import { reactive, ref, toRefs } from "@vue/reactivity";
 import { onMounted, provide } from "vue-demi";
 import { useDesignStore } from "@/store/design.ts";
 import { useCanvas } from "./useCanvas";
+import { useGroup } from "./useGroup";
 import Shape from "./Shape.vue";
 import ActionMenu from "./ActionMenu.vue";
 import MarkLine from "./MarkLine.vue";
 import Area from "./Area.vue";
 import Group from "./Group.vue";
-import DesignWidgetList from './DesignWidgetList.vue'
+import DesignWidgetList from "./DesignWidgetList.vue";
 
 const { widgetList, curWidget } = toRefs(useDesignStore());
 const { handleDrop, handleDragOver, initCanvaConfig } = useDesignStore();
 
 const canvasRef = ref<HTMLElement | null>(null);
 const contentMeauRef = ref<HTMLElement | null>(null);
-const { setCanvasRect, handleActionMenu, handleMouseDown } = useCanvas();
+const { setCanvasRect, handleActionMenu } = useCanvas();
+const { selectedArea } = useGroup();
 
 // 渲染后，设置canvasRef
 onMounted(() => {

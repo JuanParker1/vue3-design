@@ -3,15 +3,23 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:24:03
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-04-27 15:29:52
+ * @LastEditTime: 2022-05-16 16:55:29
 -->
 <template>
   <div class="design-operator">
-    operator
+    <template v-if="areaWidgets.length">
+      <button @click="createGroup">组合</button>
+    </template>
   </div>
 </template>
 
 <script setup lang='ts'>
+import { ref, toRefs } from "vue";
+import { useGroup } from "@/components/Design/DesignCanvas/useGroup.ts";
+import { useGroupStore } from "@/store/group.ts";
+
+let { areaWidgets } = toRefs(useGroup());
+let { createGroup } = useGroup();
 </script>
 
 <style lang="scss" scoped>
