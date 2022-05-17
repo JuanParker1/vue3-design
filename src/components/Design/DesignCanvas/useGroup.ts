@@ -166,15 +166,20 @@ function createGroup() {
     list: [],
   };
   areaWidgets.value.forEach((w: any) => {
-    if (w && w.component != "group") {
+    if (w && w.component != "Group") {
       group.list.push(w);
     } else {
+      // 选中物料包含组合，拆分合入新组合
+      w.list.forEach((item: any) => {
+        decomposeWidget(item, w, canvasRect.value);
+        delete item.groupStyle;
+        group.list.push(item);
+      });
     }
   });
 
   deleteWidget(areaWidgets.value.map((w: any) => w.id));
   widgetList.value.push(group);
-
   clearArea();
   setCurrWidget(group.id);
 }
