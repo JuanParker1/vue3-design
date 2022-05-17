@@ -3,10 +3,15 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-12 20:47:26
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-17 17:07:48
+ * @LastEditTime: 2022-05-17 20:35:09
 -->
 <template>
-  <div class="area" v-show="inArea" :style="getCommonStyle(areaStyle)"></div>
+  <div
+    class="area"
+    v-show="inArea"
+    :style="getCommonStyle(areaStyle)"
+    @mousedown="moveArea"
+  ></div>
 </template>
 
 <script setup lang='ts'>
@@ -15,6 +20,7 @@ import { getCommonStyle } from "@/utils/style";
 import { useGroup } from "./useGroup";
 
 const { inArea, areaStyle } = toRefs(useGroup());
+const { moveArea } = useGroup();
 </script>
 
 <style lang="scss" scoped>

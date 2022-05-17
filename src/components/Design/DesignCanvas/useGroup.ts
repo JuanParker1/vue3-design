@@ -6,6 +6,8 @@ import { sin, cos } from "@/utils/index";
 import { createId } from "@/hooks/common";
 import { useWidgetAndGroup } from "@/hooks/design/useWidgetAndGroup";
 import { Widget } from "@/types/widget";
+import _ from "lodash";
+import { isTemplateNode } from "@vue/compiler-core";
 
 let inArea = ref(false);
 let areaStyle = ref<any>({});
@@ -109,6 +111,45 @@ function WidgetsInGroup() {
   });
 }
 
+// 移动选中区域
+function moveArea(e: any) {
+  e.preventDefault();
+  e.stopPropagation();
+  console.log("moveArea");
+
+  // 关闭菜单
+  // hidenAction();
+
+  const { clientX: startX, clientY: startY } = e;
+  const { left: areaLeft, top: areaTop } = areaStyle.value;
+  const cloneAreaWidgets = _.cloneDeep(areaWidgets.value);
+
+  const move = (moveEvent: any) => {
+    console.log("move");
+    const { clientX: currX, clientY: currY } = moveEvent;
+
+    // 移动选中区域
+    areaStyle.value.left = currX - startX + areaLeft;
+    areaStyle.value.top = currY - startY + areaTop;
+
+    // 移动选中区域所有物料
+    const widgets = widgetList.value;
+    cloneAreaWidgets.forEach((item: any) => {
+      let temp = widgets.find((w) => w.id == item.id);
+      temp.style.left = currX - startX + item.style.left;
+      temp.style.top = currY - startY + item.style.top;
+    });
+  };
+
+  const up = () => {
+    document.removeEventListener("mousemove", move);
+    document.removeEventListener("mouseup", up);
+  };
+
+  document.addEventListener("mousemove", move);
+  document.addEventListener("mouseup", up);
+}
+
 // 获取一个物料旋转 rotate 后的样式
 export function getComponentRotatedStyle(style: any) {
   style = { ...style };
@@ -204,4 +245,5 @@ export const useGroup = () => ({
   selectedArea,
   createGroup,
   breakGroup,
+  moveArea,
 });
