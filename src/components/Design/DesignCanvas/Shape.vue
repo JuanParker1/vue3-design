@@ -4,7 +4,7 @@
     :style="getShapeStyle(props.widgetStyle)"
     @mousedown="handleMoveShape($event, props.id, props.widgetStyle)"
   >
-    <div class="shape-mask" :id="id"></div>
+    <!-- <div class="shape-mask" :id="id"></div> -->
 
     <slot></slot>
 
@@ -20,6 +20,7 @@
             >{{ Math.round(props.widgetStyle.rotate) }}°</span
           >
         </div>
+        <div class="shape-line"></div>
 
         <!-- 操作圆点 -->
         <div
@@ -30,8 +31,6 @@
           :style="getShapePonitStyle(item, props.widgetStyle)"
           @mousedown="handleShrinkShape($event, item, props.widgetStyle)"
         ></div>
-
-        <div class="shape-line"></div>
       </template>
       <template v-else>
         <div class="shape-move"></div>
@@ -78,6 +77,12 @@ const {
 <style lang="scss" scoped>
 .shape {
   position: absolute;
+  box-sizing: content-box;
+
+  &:hover {
+    cursor: move;
+    outline: 1px solid #ff6e7b !important;
+  }
 
   .shape-mask {
     width: 100%;
@@ -127,8 +132,9 @@ const {
     left: 0;
     width: 100%;
     height: 100%;
-    border: 3px solid #ff6e7b;
-    z-index: 99;
+    box-sizing: content-box;
+    outline: 3px solid #ff6e7b;
+    box-sizing: content-box;
   }
 
   .shape-move {
@@ -142,8 +148,8 @@ const {
 
   .shape-point {
     box-sizing: border-box;
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     position: absolute;
     background: #fff;
     box-shadow: 0 0 3px 0 rgba(0, 0, 0, 20%);
@@ -151,10 +157,11 @@ const {
     border-radius: 50%;
     transform: translate(-50%, -50%);
     z-index: 10001;
+    box-sizing: content-box;
     cursor: e-resize;
 
     &-l {
-      margin-left: 1px;
+      margin-left: -2px;
       cursor: w-resize;
       width: 8px;
       height: 18px;
@@ -162,7 +169,7 @@ const {
     }
 
     &-r {
-      margin-left: -1px;
+      margin-left: 2px;
       cursor: w-resize;
       width: 8px;
       height: 18px;
@@ -170,7 +177,7 @@ const {
     }
 
     &-t {
-      margin-top: 1px;
+      margin-top: -2px;
       cursor: n-resize;
       width: 18px;
       height: 8px;
@@ -178,7 +185,7 @@ const {
     }
 
     &-b {
-      margin-top: -1px;
+      margin-top: 2px;
       cursor: n-resize;
       width: 18px;
       height: 8px;
@@ -186,19 +193,19 @@ const {
     }
 
     &-lt {
-      margin: 2px 0 0 2px;
+      margin: -1px 0 0 -1px;
     }
 
     &-rt {
-      margin: 0 0 0 -2px;
+      margin: 0 0 0 1px;
     }
 
     &-lb {
-      margin: -2px 0 0 2px;
+      margin: 1px 0 0 -1px;
     }
 
     &-rb {
-      margin: -2px 0 0 -2px;
+      margin: 1px 0 0 1px;
     }
   }
 }

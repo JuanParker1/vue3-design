@@ -1,3 +1,10 @@
+/*
+ * @Description: What's this for
+ * @Autor: WangYuan1
+ * @Date: 2022-05-11 11:22:18
+ * @LastEditors: WangYuan
+ * @LastEditTime: 2022-05-17 19:57:48
+ */
 import { defineStore } from "pinia";
 import _ from "lodash";
 import widgets from "@/mock/widget";
@@ -6,6 +13,7 @@ import { WidgetStyle, Widget } from "@/types/widget";
 
 interface DesignState {
   curWidget: Widget | null;
+  curGroupWidget: Widget | null;
   widgetList: Widget[];
 }
 
@@ -15,7 +23,8 @@ export const useDesignStore = defineStore({
   state: (): DesignState => {
     return {
       widgetList: [],
-      curWidget: null,
+      curWidget: null, // 当前选中物料
+      curGroupWidget: null, // 当前选中组合内物料
     };
   },
 
@@ -55,11 +64,13 @@ export const useDesignStore = defineStore({
     // 设置当前操作物料
     setCurrWidget(id: string | undefined) {
       if (id) {
-        console.log("当前操作物料");
+        if (this.curWidget?.id == id) return;
 
         this.curWidget = this.widgetList.find((w) => w.id == id);
+        console.log("this.curWidget", this.curWidget);
       } else {
         this.curWidget = null;
+        this.curGroupWidget = null;
       }
     },
     // 修改当前物料样式
@@ -67,16 +78,25 @@ export const useDesignStore = defineStore({
       Object.keys(style).forEach((key) => {
         this.curWidget.style[key] = style[key];
       });
-      // console.log('setCurrWidgetStyle');
-      // console.log(this.curWidget.style);
     },
     // 删除物料
     deleteWidget(target: string | string[]) {
-      if (typeof id == "string") {
+      if (typeof target == "string") {
         this.widgetList = this.widgetList.filter((w) => w.id != target);
       } else {
         this.widgetList = this.widgetList.filter((w) => !target.includes(w.id));
       }
+    },
+    setCurGroupWidget(id: string) {
+      this.widgetList.map((item: any) => {
+        if (item.component == "Group") {
+          let temp = item.list.find((w: any) => w.id == id);
+          if (temp) {
+            this.curWidget = item;
+            this.curGroupWidget = temp;
+          }
+        }
+      });
     },
   },
 });

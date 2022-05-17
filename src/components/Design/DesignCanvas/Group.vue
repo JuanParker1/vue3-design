@@ -3,16 +3,22 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-16 11:43:15
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-17 17:08:07
+ * @LastEditTime: 2022-05-17 19:46:15
 -->
 <template>
   <div class="group">
     <div
       class="group-item"
+      :class="
+        curGroupWidget && curGroupWidget.id == item.id
+          ? 'group-item-active'
+          : ''
+      "
       v-for="item in group.list"
       :key="item.id"
       :style="getCommonStyle(item.groupStyle, 'fontSize', '%')"
       :id="'widget-' + item.id"
+      @click="setCurGroupWidget(item.id)"
     >
       <component :is="item.component" class="design-shell-widget" />
     </div>
@@ -23,6 +29,8 @@
 import { getCommonStyle } from "@/utils/style";
 import { onBeforeMount } from "vue-demi";
 import { useWidgetAndGroup } from "@/hooks/design/useWidgetAndGroup";
+import { useDesignStore } from "@/store/design";
+import { ref, toRefs } from "vue";
 
 const props = defineProps({
   group: {
@@ -31,6 +39,8 @@ const props = defineProps({
 });
 
 const { composeWidgetStyle } = useWidgetAndGroup();
+const { curGroupWidget } = toRefs(useDesignStore());
+const { setCurGroupWidget } = useDesignStore();
 
 onBeforeMount(() => {
   props.group.list.forEach((item) => {
@@ -49,6 +59,11 @@ onBeforeMount(() => {
   .group-item {
     position: absolute;
     user-select: none;
+    z-index: 100;
+  }
+
+  .group-item-active {
+    border: 1px dashed #ff6e7b;
   }
 
   .design-shell-widget {
