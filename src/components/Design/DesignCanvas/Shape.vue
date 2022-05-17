@@ -97,6 +97,7 @@ const {
     left: 50%;
     z-index: 4;
     margin: 14px 0 0 -11px;
+    user-select: none;
 
     &:hover {
       cursor: url(https://s.tuguaishou.com/site/editor/hand.png) 8 8, auto;

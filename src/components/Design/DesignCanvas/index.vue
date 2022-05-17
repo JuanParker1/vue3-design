@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-17 09:53:49
+ * @LastEditTime: 2022-05-17 16:14:55
 -->
 <template>
   <div
@@ -85,6 +85,7 @@ onMounted(() => {
       position: absolute;
       width: 100%;
       height: 100%;
+      user-select: none;
     }
   }
 }

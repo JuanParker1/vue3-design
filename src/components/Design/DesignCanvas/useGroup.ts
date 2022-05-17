@@ -4,16 +4,18 @@ import { useCanvas } from "./useCanvas";
 import { ref, toRefs } from "vue";
 import { sin, cos } from "@/utils/index.ts";
 import { createId } from "@/hooks/common";
+import { useWidgetAndGroup } from "@/hooks/design/useWidgetAndGroup.ts";
 
 let inArea = ref(false);
 let areaStyle = ref<any>({});
-let areaWidgets = ref<any>({});
+let areaWidgets = ref<any>([]);
 const { canvasRect } = toRefs(useCanvas());
 const { widgetList } = toRefs(useDesignStore());
 const { setCurrWidget, deleteWidget } = useDesignStore();
 const { openAction, hidenAction } = useAction();
+const { decomposeWidget } = useWidgetAndGroup();
 
-// 选中区域
+// 拖拽选中区域，选择包含物料
 function selectedArea(e: any) {
   e.stopPropagation();
   e.preventDefault();
@@ -51,7 +53,7 @@ function selectedArea(e: any) {
   document.addEventListener("mouseup", up);
 }
 
-// 创建区域
+// 拖拽选中区域完成，创建物料区域
 function createArea() {
   areaWidgets.value = WidgetsInGroup();
   console.log("areaWidgets", areaWidgets);
@@ -83,7 +85,7 @@ function createArea() {
   setCurrWidget(null);
 }
 
-// 选中区域包含物料
+// 遍历区域包含物料
 function WidgetsInGroup() {
   const {
     left: areaLeft,
@@ -138,6 +140,12 @@ function hiddenArea() {
   areaStyle.value = {};
 }
 
+// 清除区域
+function clearArea() {
+  hiddenArea();
+  areaWidgets.value = [];
+}
+
 // 创建组合
 function createGroup() {
   const { x: canvasX, y: canvasY } = canvasRect.value as any;
@@ -164,13 +172,24 @@ function createGroup() {
   });
 
   deleteWidget(areaWidgets.value.map((w) => w.id));
-
   widgetList.value.push(group);
-  console.log('group', group);
-  console.log("widgetList.value", widgetList.value);
 
-  hiddenArea();
+  clearArea();
   setCurrWidget(group.id);
+}
+
+// 拆分组合
+function breakGroup(id: string) {
+  let group = widgetList.value.find((item) => item.id == id);
+  console.log("group", group);
+  group.list.forEach((item) => {
+    decomposeWidget(item, group, canvasRect.value);
+    delete item.groupStyle;
+    widgetList.value.push(item);
+  });
+
+  deleteWidget(group.id);
+  console.log("widgetList", widgetList);
 }
 
 export const useGroup = () => ({
@@ -179,4 +198,5 @@ export const useGroup = () => ({
   areaWidgets,
   selectedArea,
   createGroup,
+  breakGroup,
 });

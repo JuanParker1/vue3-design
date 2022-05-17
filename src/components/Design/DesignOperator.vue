@@ -3,10 +3,13 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:24:03
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-17 09:55:21
+ * @LastEditTime: 2022-05-17 13:58:08
 -->
 <template>
   <div class="design-operator">
+    <template v-if="curWidget && curWidget.component == 'Group'">
+      <button @click="breakGroup(curWidget.id)">拆分</button>
+    </template>
     <template v-if="areaWidgets.length > 1">
       <button @click="createGroup">组合</button>
     </template>
@@ -17,9 +20,11 @@
 import { ref, toRefs } from "vue";
 import { useGroup } from "@/components/Design/DesignCanvas/useGroup.ts";
 import { useGroupStore } from "@/store/group.ts";
+import { useDesignStore } from "@/store/design.ts";
 
 let { areaWidgets } = toRefs(useGroup());
-let { createGroup } = useGroup();
+let { createGroup, breakGroup } = useGroup();
+const { curWidget } = toRefs(useDesignStore());
 </script>
 
 <style lang="scss" scoped>
