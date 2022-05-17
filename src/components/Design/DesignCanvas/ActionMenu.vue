@@ -1,3 +1,10 @@
+<!--
+ * @Description: What's this for
+ * @Autor: WangYuan1
+ * @Date: 2022-05-09 10:52:50
+ * @LastEditors: WangYuan
+ * @LastEditTime: 2022-05-17 17:07:04
+-->
 <template>
   <ul v-show="actionShow" class="action" :style="getCommonStyle(actionStyle)">
     <li
@@ -13,7 +20,7 @@
 
 <script setup lang='ts'>
 import { ref, toRefs } from "vue-demi";
-import { getCommonStyle } from "@/utils/style.ts";
+import { getCommonStyle } from "@/utils/style";
 import { useAction } from "./useAction";
 
 const { actionList, actionShow, actionStyle } = toRefs(useAction());

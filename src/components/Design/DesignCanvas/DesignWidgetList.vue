@@ -1,3 +1,10 @@
+<!--
+ * @Description: What's this for
+ * @Autor: WangYuan1
+ * @Date: 2022-05-16 14:38:17
+ * @LastEditors: WangYuan
+ * @LastEditTime: 2022-05-17 17:07:57
+-->
 <template>
   <div class="design-list">
     <Shape
@@ -16,8 +23,8 @@
 
 <script setup lang='ts'>
 import { reactive, ref, toRefs } from "@vue/reactivity";
-import { useDesignStore } from "@/store/design.ts";
-import Widget from "@/types/widget.ts";
+import { useDesignStore } from "@/store/design";
+import Widget from "@/types/widget";
 import Shape from "./Shape.vue";
 import Group from "./Group.vue";
 

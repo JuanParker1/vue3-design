@@ -1,10 +1,11 @@
-import { useDesignStore } from "@/store/design.ts";
+import { useDesignStore } from "@/store/design";
 import { useAction } from "./useAction";
 import { useCanvas } from "./useCanvas";
 import { ref, toRefs } from "vue";
-import { sin, cos } from "@/utils/index.ts";
+import { sin, cos } from "@/utils/index";
 import { createId } from "@/hooks/common";
-import { useWidgetAndGroup } from "@/hooks/design/useWidgetAndGroup.ts";
+import { useWidgetAndGroup } from "@/hooks/design/useWidgetAndGroup";
+import { Widget } from "@/types/widget";
 
 let inArea = ref(false);
 let areaStyle = ref<any>({});
@@ -65,7 +66,7 @@ function createArea() {
   let right = -Infinity,
     bottom = -Infinity;
 
-  areaWidgets.value.forEach((w) => {
+  areaWidgets.value.forEach((w: any) => {
     let style;
 
     style = getComponentRotatedStyle(w.style);
@@ -82,7 +83,7 @@ function createArea() {
     width: right - left,
     height: bottom - top,
   };
-  setCurrWidget(null);
+  setCurrWidget(undefined);
 }
 
 // 遍历区域包含物料
@@ -95,7 +96,7 @@ function WidgetsInGroup() {
   } = areaStyle.value;
   const { x: canvasX, y: canvasY } = canvasRect.value as any;
 
-  return widgetList.value.filter((w) => {
+  return widgetList.value.filter((w: Widget) => {
     const { left, top, width, height } = w.style;
     if (
       areaLeft <= left + canvasX &&
@@ -109,7 +110,7 @@ function WidgetsInGroup() {
 }
 
 // 获取一个物料旋转 rotate 后的样式
-export function getComponentRotatedStyle(style) {
+export function getComponentRotatedStyle(style: any) {
   style = { ...style };
   if (style.rotate != 0) {
     const newWidth =
@@ -158,20 +159,20 @@ function createGroup() {
     height,
   };
 
-  let group = {
+  let group: any = {
     id: createId(),
     component: "Group",
     style,
     list: [],
   };
-  areaWidgets.value.forEach((w) => {
-    if (w.component != "group") {
+  areaWidgets.value.forEach((w: any) => {
+    if (w && w.component != "group") {
       group.list.push(w);
     } else {
     }
   });
 
-  deleteWidget(areaWidgets.value.map((w) => w.id));
+  deleteWidget(areaWidgets.value.map((w: any) => w.id));
   widgetList.value.push(group);
 
   clearArea();
@@ -180,9 +181,8 @@ function createGroup() {
 
 // 拆分组合
 function breakGroup(id: string) {
-  let group = widgetList.value.find((item) => item.id == id);
-  console.log("group", group);
-  group.list.forEach((item) => {
+  let group: any = widgetList.value.find((item: any) => item.id == id);
+  group.list.forEach((item: any) => {
     decomposeWidget(item, group, canvasRect.value);
     delete item.groupStyle;
     widgetList.value.push(item);

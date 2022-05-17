@@ -1,4 +1,11 @@
-import { useDesignStore } from "@/store/design.ts";
+/*
+ * @Description: What's this for
+ * @Autor: WangYuan1
+ * @Date: 2022-05-09 10:52:50
+ * @LastEditors: WangYuan
+ * @LastEditTime: 2022-05-17 17:04:54
+ */
+import { useDesignStore } from "@/store/design";
 import { useAction } from "./useAction";
 import { ref, toRefs } from "vue";
 

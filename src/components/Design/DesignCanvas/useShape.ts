@@ -1,9 +1,9 @@
 import { defineEmits, ref, toRefs } from "vue";
 import { WidgetStyle } from "@/types/widget";
-import { getCommonStyle } from "@/utils//style.ts";
+import { getCommonStyle } from "@/utils/style";
 import { useAction } from "./useAction";
 import { useMarkLine } from "./useMarkLine";
-import { useDesignStore } from "@/store/design.ts";
+import { useDesignStore } from "@/store/design";
 import { useCanvas } from "./useCanvas";
 import { calculateComponentPositonAndSize } from "@/hooks/design/useAnglePositon";
 
@@ -90,7 +90,7 @@ export function useShape(emits: any) {
     e.stopPropagation();
     e.preventDefault();
 
-    const style = { ...widgetStyle };
+    const style: any = { ...widgetStyle };
 
     // 组件宽高比
     const proportion = style.width / style.height;

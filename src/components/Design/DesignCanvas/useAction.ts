@@ -1,6 +1,13 @@
+/*
+ * @Description: What's this for
+ * @Autor: WangYuan1
+ * @Date: 2022-05-12 19:57:03
+ * @LastEditors: WangYuan
+ * @LastEditTime: 2022-05-17 17:16:55
+ */
 import { ref } from "vue";
-import { useDesignStore } from "@/store/design.ts";
-import { swapArray } from "@/utils/index.ts";
+import { useDesignStore } from "@/store/design";
+import { swapArray } from "@/utils/index";
 import { Widget } from "@/types/widget";
 
 interface ActionState {
@@ -28,9 +35,9 @@ const actionList = [
 
 // 打开行动栏
 function openAction(style: ActionStyle) {
-  console.log('打开行动栏');
+  console.log("打开行动栏");
   actionStyle.value = style;
-  console.log('style', style);
+  console.log("style", style);
   actionShow.value = true;
 }
 
@@ -42,6 +49,8 @@ function hidenAction() {
 // 上移一层
 function up() {
   const { widgetList, curWidget } = useDesignStore();
+  if (!curWidget) return;
+
   const max = widgetList.length - 1;
   const curIndex = widgetList.findIndex((w: Widget) => w.id == curWidget.id);
   if (curIndex < max) swapArray(widgetList, curIndex, curIndex + 1);
@@ -51,6 +60,8 @@ function up() {
 // 下移一层
 function down() {
   const { widgetList, curWidget } = useDesignStore();
+  if (!curWidget) return;
+
   const curIndex = widgetList.findIndex((w: Widget) => w.id == curWidget.id);
   if (curIndex > 0) swapArray(widgetList, curIndex, curIndex - 1);
   hidenAction();
@@ -59,6 +70,8 @@ function down() {
 // 置顶
 function top() {
   const { widgetList, curWidget } = useDesignStore();
+  if (!curWidget) return;
+
   const curIndex = widgetList.findIndex((w: Widget) => w.id == curWidget.id);
   const curr = widgetList.splice(curIndex, 1)[0];
   widgetList.push(curr);
@@ -68,6 +81,8 @@ function top() {
 // 置底
 function bottom() {
   const { widgetList, curWidget } = useDesignStore();
+  if (!curWidget) return;
+
   const curIndex = widgetList.findIndex((w: Widget) => w.id == curWidget.id);
   const curr = widgetList.splice(curIndex, 1)[0];
   widgetList.unshift(curr);

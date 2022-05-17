@@ -1,3 +1,10 @@
+<!--
+ * @Description: What's this for
+ * @Autor: WangYuan1
+ * @Date: 2022-05-16 11:43:15
+ * @LastEditors: WangYuan
+ * @LastEditTime: 2022-05-17 17:08:07
+-->
 <template>
   <div class="group">
     <div
@@ -13,9 +20,9 @@
 </template>
 
 <script setup lang='ts'>
-import { getCommonStyle } from "@/utils/style.ts";
+import { getCommonStyle } from "@/utils/style";
 import { onBeforeMount } from "vue-demi";
-import { useWidgetAndGroup } from "@/hooks/design/useWidgetAndGroup.ts";
+import { useWidgetAndGroup } from "@/hooks/design/useWidgetAndGroup";
 
 const props = defineProps({
   group: {

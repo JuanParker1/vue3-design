@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:24:03
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-17 13:58:08
+ * @LastEditTime: 2022-05-17 17:08:34
 -->
 <template>
   <div class="design-operator">
@@ -18,9 +18,9 @@
 
 <script setup lang='ts'>
 import { ref, toRefs } from "vue";
-import { useGroup } from "@/components/Design/DesignCanvas/useGroup.ts";
-import { useGroupStore } from "@/store/group.ts";
-import { useDesignStore } from "@/store/design.ts";
+import { useGroup } from "@/components/Design/DesignCanvas/useGroup";
+import { useGroupStore } from "@/store/group";
+import { useDesignStore } from "@/store/design";
 
 let { areaWidgets } = toRefs(useGroup());
 let { createGroup, breakGroup } = useGroup();

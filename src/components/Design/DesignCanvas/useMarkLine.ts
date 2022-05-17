@@ -1,8 +1,7 @@
 import { ref, toRef, toRefs } from "vue";
 import { useDesignStore } from "@/store/design";
-import { getCommonStyle } from "@/utils//style.ts";
-import { sin, cos } from "@/utils/index.ts";
-
+import { getCommonStyle } from "@/utils/style";
+import { sin, cos } from "@/utils/index";
 interface MarkLine {
   type: string;
   style: {
@@ -33,7 +32,9 @@ const { setCurrWidgetStyle } = useDesignStore();
 // 移动显示辅助线
 function detectionMarkLine() {
   hideMarkLine();
-  let style = { ...curWidget.value.style };
+  if (!curWidget) return;
+
+  let style: any = { ...curWidget.value.style };
   let curr = getLineShape(curWidget.value.style);
 
   widgetList.value

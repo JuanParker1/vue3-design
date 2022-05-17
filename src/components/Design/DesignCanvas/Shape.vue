@@ -43,7 +43,7 @@
 <script lang="ts" setup>
 import { defineEmits } from "vue";
 import { useShape } from "./useShape";
-import { useDesignStore } from "@/store/design.ts";
+import { useDesignStore } from "@/store/design";
 
 const props = defineProps({
   widgetStyle: {

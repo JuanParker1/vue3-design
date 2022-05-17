@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-17 16:14:55
+ * @LastEditTime: 2022-05-17 17:06:04
 -->
 <template>
   <div
@@ -42,7 +42,7 @@
 <script setup lang='ts'>
 import { reactive, ref, toRefs } from "@vue/reactivity";
 import { onMounted, provide } from "vue-demi";
-import { useDesignStore } from "@/store/design.ts";
+import { useDesignStore } from "@/store/design";
 import { useCanvas } from "./useCanvas";
 import { useGroup } from "./useGroup";
 import Shape from "./Shape.vue";
