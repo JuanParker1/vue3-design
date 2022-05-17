@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-16 17:27:10
+ * @LastEditTime: 2022-05-17 09:53:49
 -->
 <template>
   <div
@@ -24,7 +24,7 @@
         <Group
           v-if="item.component == 'Group'"
           class="design-shell-widget"
-          :data="item"
+          :group="item"
         />
         <component v-else class="design-shell-widget" :is="item.component" />
       </Shape>
