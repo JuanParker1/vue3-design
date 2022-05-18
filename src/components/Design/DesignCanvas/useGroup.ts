@@ -118,14 +118,13 @@ function moveArea(e: any) {
   console.log("moveArea");
 
   // 关闭菜单
-  // hidenAction();
+  hidenAction();
 
   const { clientX: startX, clientY: startY } = e;
   const { left: areaLeft, top: areaTop } = areaStyle.value;
   const cloneAreaWidgets = _.cloneDeep(areaWidgets.value);
 
   const move = (moveEvent: any) => {
-    console.log("move");
     const { clientX: currX, clientY: currY } = moveEvent;
 
     // 移动选中区域
