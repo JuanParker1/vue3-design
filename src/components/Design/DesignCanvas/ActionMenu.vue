@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-09 10:52:50
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-17 17:07:04
+ * @LastEditTime: 2022-05-18 13:54:24
 -->
 <template>
   <ul v-show="actionShow" class="action" :style="getCommonStyle(actionStyle)">
@@ -11,7 +11,8 @@
       class="action-item"
       v-for="(action, index) in actionList"
       :key="index"
-      @click="action.actionFun"
+      @click="action.actionFun($event)"
+      @mousedown.stop=""
     >
       {{ action.label }}
     </li>
@@ -24,6 +25,13 @@ import { getCommonStyle } from "@/utils/style";
 import { useAction } from "./useAction";
 
 const { actionList, actionShow, actionStyle } = toRefs(useAction());
+
+function stopBubbling(e: any) {
+  console.log("stopBubbling");
+
+  e.stopPropagation();
+  e.preventDefault();
+}
 </script>
 
 <style lang="scss" scoped>

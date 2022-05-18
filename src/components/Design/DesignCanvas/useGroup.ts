@@ -23,6 +23,8 @@ function selectedArea(e: any) {
   e.stopPropagation();
   e.preventDefault();
 
+  console.log('拖拽选中区域，选择包含物料');
+  
   hidenAction();
   hiddenArea();
 
@@ -59,6 +61,8 @@ function selectedArea(e: any) {
 // 拖拽选中区域完成，创建物料区域
 function createArea() {
   areaWidgets.value = WidgetsInGroup();
+  console.log('拖拽选中区域完成，创建物料区域');
+  
   console.log("areaWidgets", areaWidgets);
   if (!areaWidgets.value.length) hiddenArea();
 
