@@ -32,11 +32,7 @@ const emits = defineEmits(["update:widgetStyle"]);
 
 const { setCurrWidget } = useDesignStore();
 
-const {
-  inMove,
-  getShapeStyle,
-  handleMoveShape,
-} = useShape(emits);
+const { inMove, getShapeStyle, handleMoveShape } = useShape(emits);
 </script>
 
 <style lang="scss" scoped>

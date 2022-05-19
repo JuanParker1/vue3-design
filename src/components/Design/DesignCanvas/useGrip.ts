@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-19 18:27:10
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-19 20:25:32
+ * @LastEditTime: 2022-05-19 20:41:04
  */
 import { ref, toRefs, computed } from "vue";
 import { useDesignStore } from "@/store/design";
@@ -22,11 +22,16 @@ const { setCurrWidgetStyle } = useDesignStore();
 const gripStyle = computed(() => {
   let style = curWidget.value.style;
 
-  return {
-    ...getCommonStyle(style, ["width", "height"]),
-    top: `${style.top + style.height / 2}px `,
-    left: `${style.left + style.width / 2}px`,
-  };
+  return getCommonStyle(
+    {
+      ...style,
+      ...{
+        top: style.top + style.height / 2,
+        left: style.left + style.width / 2,
+      },
+    },
+    ["width", "height"]
+  );
 });
 
 // 从中心的计算8个圆点样式
@@ -36,55 +41,55 @@ const points = computed(() => {
   return [
     {
       name: "lt",
-      style: {
-        top: `${-(style.height / 2 + lineThick)}px`,
-        left: `${-(style.width / 2)}px`,
-      },
+      style: getCommonStyle({
+        top: -(style.height / 2 + lineThick),
+        left: -(style.width / 2),
+      }),
     },
     {
       name: "t",
-      style: {
-        top: `${-(style.height / 2 + lineThick)}px`,
-      },
+      style: getCommonStyle({
+        top: -(style.height / 2 + lineThick),
+      }),
     },
     {
       name: "rt",
-      style: {
-        top: `${-(style.height / 2 + lineThick)}px`,
-        left: `${style.width / 2}px`,
-      },
+      style: getCommonStyle({
+        top: -(style.height / 2 + lineThick),
+        left: style.width / 2,
+      }),
     },
     {
       name: "r",
-      style: {
-        left: `${style.width / 2}px`,
-      },
+      style: getCommonStyle({
+        left: style.width / 2,
+      }),
     },
     {
       name: "rb",
-      style: {
-        top: `${style.height / 2 + lineThick}px`,
-        left: `${style.width / 2}px`,
-      },
+      style: getCommonStyle({
+        top: style.height / 2 + lineThick,
+        left: style.width / 2,
+      }),
     },
     {
       name: "b",
-      style: {
-        top: `${style.height / 2 + lineThick}px`,
-      },
+      style: getCommonStyle({
+        top: style.height / 2 + lineThick,
+      }),
     },
     {
       name: "lb",
-      style: {
-        top: `${style.height / 2 + lineThick}px`,
-        left: `${-(style.width / 2)}px`,
-      },
+      style: getCommonStyle({
+        top: style.height / 2 + lineThick,
+        left: -(style.width / 2),
+      }),
     },
     {
       name: "l",
-      style: {
-        left: `${-(style.width / 2)}px`,
-      },
+      style: getCommonStyle({
+        left: -(style.width / 2),
+      }),
     },
   ];
 });
@@ -94,33 +99,33 @@ const lines = computed(() => {
   let style = curWidget.value.style;
   return [
     // top-line
-    {
-      top: `${-(style.height / 2 + lineThick)}px`,
-      left: `${-(style.width / 2)}px`,
-      height: `${lineThick}px`,
-      width: `${style.width}px`,
-    },
+    getCommonStyle({
+      top: -(style.height / 2 + lineThick),
+      left: -(style.width / 2),
+      height: lineThick,
+      width: style.width,
+    }),
     // left-line
-    {
-      top: `${-(style.height / 2)}px`,
-      left: `${-(style.width / 2 + lineThick)}px`,
-      height: `${style.height}px`,
-      width: `${lineThick}px`,
-    },
+    getCommonStyle({
+      top: -(style.height / 2),
+      left: -(style.width / 2 + lineThick),
+      height: style.height,
+      width: lineThick,
+    }),
     // right-line
-    {
-      top: `${-(style.height / 2)}px`,
-      left: `${style.width / 2}px`,
-      height: `${style.height}px`,
-      width: `${lineThick}px`,
-    },
+    getCommonStyle({
+      top: -(style.height / 2),
+      left: style.width / 2,
+      height: style.height,
+      width: lineThick,
+    }),
     // bottom-line
-    {
-      top: `${style.height / 2}px`,
-      left: `${-(style.width / 2)}px`,
-      height: `${lineThick}px`,
-      width: `${style.width}px`,
-    },
+    getCommonStyle({
+      top: style.height / 2,
+      left: -(style.width / 2),
+      height: lineThick,
+      width: style.width,
+    }),
   ];
 });
 
