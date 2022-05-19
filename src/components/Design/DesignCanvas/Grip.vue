@@ -3,14 +3,10 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-19 17:42:01
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-19 18:56:49
+ * @LastEditTime: 2022-05-19 20:10:59
 -->
 <template>
-  <div
-    class="grip"
-    v-if="curWidget"
-    :style="getCommonStyle(curWidget.style, ['width', 'height', 'rotate'])"
-  >
+  <div class="grip" v-if="curWidget" :style="gripStyle">
     <!-- 四条边 -->
     <div
       class="absolute bg-#ff6e7b"
@@ -19,18 +15,20 @@
       :style="line"
     ></div>
 
-    <!-- <div
+    <!-- 8个圆点 -->
+    <div
       v-for="(item, index) in points"
       :key="index"
       class="grip-point"
+      :style="item.style"
       @mousedown="resizeGripWidget($event, item.name)"
-    ></div> -->
+    ></div>
 
+    <!-- 旋转按钮 -->
     <div
       class="grip-rotate"
       :style="{
-        top: `${curWidget.style.height}px`,
-        left: `${curWidget.style.width / 2}px`,
+        top: `${curWidget.style.height / 2}px`,
       }"
       @mousedown.stop="reotateGripWidget"
     >
@@ -48,54 +46,114 @@ import { useDesignStore } from "@/store/design";
 import { getCommonStyle } from "@/utils/style";
 import { useGrip } from "./useGrip";
 
+let lineThick = 3;
 const { inRotate, resizeGripWidget, reotateGripWidget } = useGrip();
 const { curWidget } = toRefs(useDesignStore());
 
 // const pointList: string[] = ["lt", "t", "rt", "r", "rb", "b", "lb", "l"]; // 八个方向
 
-const points = computed(() => [
-  {
-    name: "lt",
-  },
-]);
+// grip 中心点样式
+const gripStyle = computed(() => {
+  let style = curWidget.value.style;
+
+  return {
+    ...getCommonStyle(style, ["width", "height"]),
+    top: `${style.top + style.height / 2}px `,
+    left: `${style.left + style.width / 2}px`,
+  };
+});
+
+// 8个圆点样式
+const points = computed(() => {
+  let style = curWidget.value.style;
+
+  return [
+    {
+      name: "lt",
+      style: {
+        top: `${-(style.height / 2 + lineThick)}px`,
+        left: `${-(style.width / 2)}px`,
+      },
+    },
+    {
+      name: "t",
+      style: {
+        top: `${-(style.height / 2 + lineThick)}px`,
+      },
+    },
+    {
+      name: "rt",
+      style: {
+        top: `${-(style.height / 2 + lineThick)}px`,
+        left: `${style.width / 2}px`,
+      },
+    },
+    {
+      name: "r",
+      style: {
+        left: `${style.width / 2}px`,
+      },
+    },
+    {
+      name: "rb",
+      style: {
+        top: `${style.height / 2 + lineThick}px`,
+        left: `${style.width / 2}px`,
+      },
+    },
+    {
+      name: "b",
+      style: {
+        top: `${style.height / 2 + lineThick}px`,
+      },
+    },
+    {
+      name: "lb",
+      style: {
+        top: `${style.height / 2 + lineThick}px`,
+        left: `${-(style.width / 2)}px`,
+      },
+    },
+    {
+      name: "l",
+      style: {
+        left: `${-(style.width / 2)}px`,
+      },
+    },
+  ];
+});
 
 // 四条边动态样式
 const lines = computed(() => {
   let style = curWidget.value.style;
-  console.log(
-    "rotate: `rotate(${style.rotate}deg)`",
-    `rotate(${style.rotate}deg)`
-  );
   return [
     // top-line
     {
-      top: "-3px",
-      height: "3px",
+      top: `${-(style.height / 2 + lineThick)}px`,
+      left: `${-(style.width / 2)}px`,
+      height: `${lineThick}px`,
       width: `${style.width}px`,
-      transform: `rotate(${style.rotate}deg)`,
     },
     // left-line
     {
-      left: "-3px",
-      top: "-3px",
-      width: "3px",
-      height: `${style.height + 6}px`,
-      transform: `rotate(${style.rotate}deg)`,
+      top: `${-(style.height / 2)}px`,
+      left: `${-(style.width / 2 + lineThick)}px`,
+      height: `${style.height}px`,
+      width: `${lineThick}px`,
     },
     // right-line
     {
-      top: "-3px",
-      width: "3px",
-      left: `${style.width}px`,
-      height: `${style.height + 6}px`,
-      transform: `rotate(${style.rotate}deg)`,
+      top: `${-(style.height / 2)}px`,
+      left: `${style.width / 2}px`,
+      height: `${style.height}px`,
+      width: `${lineThick}px`,
     },
     // bottom-line
     {
-      height: "3px",
-      top: `${style.height}px`,
+      top: `${style.height / 2}px`,
+      left: `${-(style.width / 2)}px`,
+      height: `${lineThick}px`,
       width: `${style.width}px`,
-      transform: `rotate(${style.rotate}deg)`,
     },
   ];
 });
@@ -105,10 +163,11 @@ const lines = computed(() => {
 <style lang="scss" scoped>
 .grip {
   position: absolute;
-  height: 1px;
-  width: 1px;
+  height: 0.5px;
+  width: 0.5px;
   z-index: 0;
   background: #0e1217;
+  z-index: 1;
 
   .grip-point {
     box-sizing: border-box;

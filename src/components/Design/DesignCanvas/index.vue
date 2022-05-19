@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-19 18:22:13
+ * @LastEditTime: 2022-05-19 19:17:48
 -->
 <template>
   <div
@@ -92,6 +92,7 @@ onMounted(() => {
       height: 100%;
       width: 100%;
       overflow: hidden;
+      z-index: 1;
     }
 
     .design-shell-widget {
