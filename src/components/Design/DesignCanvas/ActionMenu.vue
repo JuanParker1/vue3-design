@@ -3,14 +3,15 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-09 10:52:50
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-18 13:54:24
+ * @LastEditTime: 2022-05-18 16:05:52
 -->
 <template>
   <ul v-show="actionShow" class="action" :style="getCommonStyle(actionStyle)">
     <li
-      class="action-item"
       v-for="(action, index) in actionList"
       :key="index"
+      class="action-item"
+      :class="action.disabled ? 'action-item-disabled' : 'action-item-hover'"
       @click="action.actionFun($event)"
       @mousedown.stop=""
     >
@@ -51,11 +52,17 @@ function stopBubbling(e: any) {
     font-size: 14px;
     display: flex;
     justify-content: space-between;
+  }
 
+  .action-item-hover {
     &:hover {
       color: #fff;
       background: #ff6e7b;
     }
+  }
+
+  .action-item-disabled {
+    color: #bec3c9;
   }
 }
 </style>
