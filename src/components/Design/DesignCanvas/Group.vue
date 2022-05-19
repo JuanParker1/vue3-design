@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-16 11:43:15
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-17 19:46:15
+ * @LastEditTime: 2022-05-19 17:30:30
 -->
 <template>
   <div class="group">
@@ -63,7 +63,7 @@ onBeforeMount(() => {
   }
 
   .group-item-active {
-    border: 1px dashed #ff6e7b;
+    outline: 1px solid #ff6e7b;
   }
 
   .design-shell-widget {

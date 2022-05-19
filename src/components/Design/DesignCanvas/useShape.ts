@@ -24,12 +24,12 @@ export function useShape(emits: any) {
     // 关闭菜单
     hidenAction();
     setCurrWidget(id);
-    inMove.value = true;
 
     const { top: widgetY, left: widgetX } = widgetStyle;
     const { clientX: startX, clientY: startY } = e;
 
     const move = (moveEvent: any) => {
+      inMove.value = true;
       const { clientX: currX, clientY: currY } = moveEvent;
 
       let left = currX - startX + Number(widgetX);

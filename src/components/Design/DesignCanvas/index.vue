@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-18 14:46:49
+ * @LastEditTime: 2022-05-19 17:27:41
 -->
 <template>
   <div
@@ -13,21 +13,23 @@
     @mousedown="selectedArea"
   >
     <div class="design-shell" ref="canvasRef" @contextmenu="handleActionMenu">
-      <Shape
-        v-for="(item, index) in widgetList"
-        v-model:widgetStyle="item.style"
-        :key="item.id"
-        :id="item.id"
-        :zIndex="index"
-        :active="curWidget && item.id === curWidget.id"
-      >
-        <Group
-          v-if="item.component == 'Group'"
-          class="design-shell-widget"
-          :group="item"
-        />
-        <component v-else class="design-shell-widget" :is="item.component" />
-      </Shape>
+      <div class="design-editor">
+        <Shape
+          v-for="(item, index) in widgetList"
+          v-model:widgetStyle="item.style"
+          :key="item.id"
+          :id="item.id"
+          :zIndex="index"
+          :active="curWidget && item.id === curWidget.id"
+        >
+          <Group
+            v-if="item.component == 'Group'"
+            class="design-shell-widget"
+            :group="item"
+          />
+          <component v-else class="design-shell-widget" :is="item.component" />
+        </Shape>
+      </div>
 
       <!-- 右键行动菜单 -->
       <ActionMenu ref="contentMeauRef"></ActionMenu>
@@ -80,6 +82,13 @@ onMounted(() => {
     height: 675px;
     background: #fff;
     margin: 30px auto;
+
+    .design-editor {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
 
     .design-shell-widget {
       position: absolute;
