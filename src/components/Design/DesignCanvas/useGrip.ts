@@ -3,18 +3,126 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-19 18:27:10
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-19 18:42:45
+ * @LastEditTime: 2022-05-19 20:25:32
  */
 import { ref, toRefs, computed } from "vue";
 import { useDesignStore } from "@/store/design";
 import { useCanvas } from "./useCanvas";
 import { calculateComponentPositonAndSize } from "@/hooks/design/useAnglePositon";
+import { getCommonStyle } from "@/utils/style";
 
 const diff: number = 2; // 旋转吸附角度
+let lineThick: number = 3; // 框边厚度
 let inRotate = ref(false);
 const { curWidget } = toRefs(useDesignStore());
 const { canvasRect } = toRefs(useCanvas());
 const { setCurrWidgetStyle } = useDesignStore();
+
+// grip 中心点样式
+const gripStyle = computed(() => {
+  let style = curWidget.value.style;
+
+  return {
+    ...getCommonStyle(style, ["width", "height"]),
+    top: `${style.top + style.height / 2}px `,
+    left: `${style.left + style.width / 2}px`,
+  };
+});
+
+// 从中心的计算8个圆点样式
+const points = computed(() => {
+  let style = curWidget.value.style;
+
+  return [
+    {
+      name: "lt",
+      style: {
+        top: `${-(style.height / 2 + lineThick)}px`,
+        left: `${-(style.width / 2)}px`,
+      },
+    },
+    {
+      name: "t",
+      style: {
+        top: `${-(style.height / 2 + lineThick)}px`,
+      },
+    },
+    {
+      name: "rt",
+      style: {
+        top: `${-(style.height / 2 + lineThick)}px`,
+        left: `${style.width / 2}px`,
+      },
+    },
+    {
+      name: "r",
+      style: {
+        left: `${style.width / 2}px`,
+      },
+    },
+    {
+      name: "rb",
+      style: {
+        top: `${style.height / 2 + lineThick}px`,
+        left: `${style.width / 2}px`,
+      },
+    },
+    {
+      name: "b",
+      style: {
+        top: `${style.height / 2 + lineThick}px`,
+      },
+    },
+    {
+      name: "lb",
+      style: {
+        top: `${style.height / 2 + lineThick}px`,
+        left: `${-(style.width / 2)}px`,
+      },
+    },
+    {
+      name: "l",
+      style: {
+        left: `${-(style.width / 2)}px`,
+      },
+    },
+  ];
+});
+
+// 从中心的计算四条边动态样式
+const lines = computed(() => {
+  let style = curWidget.value.style;
+  return [
+    // top-line
+    {
+      top: `${-(style.height / 2 + lineThick)}px`,
+      left: `${-(style.width / 2)}px`,
+      height: `${lineThick}px`,
+      width: `${style.width}px`,
+    },
+    // left-line
+    {
+      top: `${-(style.height / 2)}px`,
+      left: `${-(style.width / 2 + lineThick)}px`,
+      height: `${style.height}px`,
+      width: `${lineThick}px`,
+    },
+    // right-line
+    {
+      top: `${-(style.height / 2)}px`,
+      left: `${style.width / 2}px`,
+      height: `${style.height}px`,
+      width: `${lineThick}px`,
+    },
+    // bottom-line
+    {
+      top: `${style.height / 2}px`,
+      left: `${-(style.width / 2)}px`,
+      height: `${lineThick}px`,
+      width: `${style.width}px`,
+    },
+  ];
+});
 
 // 调整物料大小
 function resizeGripWidget(e: any, point: string) {
@@ -167,6 +275,9 @@ function isNearly(target: number) {
 }
 
 export const useGrip = () => ({
+  gripStyle,
+  points,
+  lines,
   inRotate,
   resizeGripWidget,
   reotateGripWidget,

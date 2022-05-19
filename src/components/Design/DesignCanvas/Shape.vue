@@ -4,36 +4,7 @@
     :style="getShapeStyle(props.widgetStyle)"
     @mousedown="handleMoveShape($event, props.id, props.widgetStyle)"
   >
-    <!-- <div class="shape-mask" :id="id"></div> -->
-
     <slot></slot>
-
-    <!-- <template v-if="active">
-      <template v-if="!inMove">
-        <div
-          class="shape-rotate"
-          @mousedown="handleRotateShape($event, props.widgetStyle)"
-        >
-          <img src="https://s.tuguaishou.com/site/editor/assetRotate.svg" />
-          <span v-show="inRotate" class="shape-rotat-val"
-            >{{ Math.round(props.widgetStyle.rotate) }}°</span
-          >
-        </div>
-        <div class="shape-line"></div>
-
-        <div
-          v-for="(item, index) in pointList"
-          :key="index"
-          class="shape-point"
-          :class="'shape-point-' + item"
-          :style="getShapePonitStyle(item, props.widgetStyle)"
-          @mousedown="handleShrinkShape($event, item, props.widgetStyle)"
-        ></div>
-      </template>
-      <template v-else>
-        <div class="shape-move"></div>
-      </template>
-    </template> -->
   </div>
 </template>
 
@@ -63,12 +34,8 @@ const { setCurrWidget } = useDesignStore();
 
 const {
   inMove,
-  inRotate,
   getShapeStyle,
-  getShapePonitStyle,
   handleMoveShape,
-  handleShrinkShape,
-  handleRotateShape,
 } = useShape(emits);
 </script>
 
