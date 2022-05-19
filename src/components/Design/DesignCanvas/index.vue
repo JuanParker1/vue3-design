@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-19 17:27:41
+ * @LastEditTime: 2022-05-19 18:22:13
 -->
 <template>
   <div
@@ -19,7 +19,7 @@
           v-model:widgetStyle="item.style"
           :key="item.id"
           :id="item.id"
-          :zIndex="index"
+          :zIndex="index + 1"
           :active="curWidget && item.id === curWidget.id"
         >
           <Group
@@ -31,11 +31,14 @@
         </Shape>
       </div>
 
+      <!-- 当前物料控制容器 -->
+      <Grip />
+
       <!-- 右键行动菜单 -->
-      <ActionMenu ref="contentMeauRef"></ActionMenu>
+      <ActionMenu ref="contentMeauRef" />
 
       <!-- 辅助线 -->
-      <MarkLine></MarkLine>
+      <MarkLine />
     </div>
   </div>
   <Area />
@@ -52,6 +55,7 @@ import ActionMenu from "./ActionMenu.vue";
 import MarkLine from "./MarkLine.vue";
 import Area from "./Area.vue";
 import Group from "./Group.vue";
+import Grip from "./Grip.vue";
 import DesignWidgetList from "./DesignWidgetList.vue";
 
 const { widgetList, curWidget } = toRefs(useDesignStore());

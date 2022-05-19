@@ -8,9 +8,8 @@
 
     <slot></slot>
 
-    <template v-if="active">
+    <!-- <template v-if="active">
       <template v-if="!inMove">
-        <!-- 旋转按钮 -->
         <div
           class="shape-rotate"
           @mousedown="handleRotateShape($event, props.widgetStyle)"
@@ -22,7 +21,6 @@
         </div>
         <div class="shape-line"></div>
 
-        <!-- 操作圆点 -->
         <div
           v-for="(item, index) in pointList"
           :key="index"
@@ -35,7 +33,7 @@
       <template v-else>
         <div class="shape-move"></div>
       </template>
-    </template>
+    </template> -->
   </div>
 </template>
 

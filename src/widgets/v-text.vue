@@ -3,21 +3,17 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 14:49:05
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-17 18:41:10
+ * @LastEditTime: 2022-05-19 17:39:53
 -->
 <template>
   <div class="text">
-    <img class="w-full h-full" src="../assets/test.png" @click="clickItem"/>
+    <img class="w-full h-full" src="../assets/test.png" @dblclick="dblclick" />
   </div>
 </template>
 
 <script setup lang='ts'>
-import { ref } from "@vue/reactivity";
-
-let text = ref("text");
-function clickItem(){
-  console.log('clickItem');
-  
+function dblclick() {
+  console.log("双击");
 }
 </script>
 
