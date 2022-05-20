@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-12 20:47:26
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-17 20:35:09
+ * @LastEditTime: 2022-05-20 09:23:04
 -->
 <template>
   <div
@@ -28,5 +28,6 @@ const { moveArea } = useGroup();
   position: absolute;
   border: solid 1px #ff6e7b;
   background: #ff6e7b05;
+  z-index: 9999;
 }
 </style>
