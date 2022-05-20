@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-19 19:17:48
+ * @LastEditTime: 2022-05-20 16:27:25
 -->
 <template>
   <div
@@ -27,7 +27,12 @@
             class="design-shell-widget"
             :group="item"
           />
-          <component v-else class="design-shell-widget" :is="item.component" />
+          <component
+            v-else
+            class="design-shell-widget"
+            :item="item"
+            :is="item.component"
+          />
         </Shape>
       </div>
 
@@ -99,7 +104,7 @@ onMounted(() => {
       position: absolute;
       width: 100%;
       height: 100%;
-      user-select: none;
+      // user-select: none;
     }
   }
 }

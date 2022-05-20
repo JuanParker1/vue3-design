@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-19 17:42:01
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-19 20:27:18
+ * @LastEditTime: 2022-05-20 16:11:46
 -->
 <template>
   <div class="grip" v-if="curWidget" :style="gripStyle">
@@ -67,7 +67,7 @@ const { resizeGripWidget, reotateGripWidget } = useGrip();
     left: 50%;
     z-index: 4;
     margin: 14px 0 0 -11px;
-    user-select: none;
+    // user-select: none;
 
     &:hover {
       cursor: url(https://s.tuguaishou.com/site/editor/hand.png) 8 8, auto;

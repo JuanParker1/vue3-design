@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-16 11:43:15
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-19 17:30:30
+ * @LastEditTime: 2022-05-20 16:10:25
 -->
 <template>
   <div class="group">
@@ -54,11 +54,11 @@ onBeforeMount(() => {
 .group {
   position: absolute;
   // background: #444972;
-  user-select: none;
+  // user-select: none;
 
   .group-item {
     position: absolute;
-    user-select: none;
+    // user-select: none;
     z-index: 100;
   }
 
@@ -70,7 +70,7 @@ onBeforeMount(() => {
     position: absolute;
     width: 100%;
     height: 100%;
-    user-select: none;
+    // user-select: none;
   }
 }
 </style>

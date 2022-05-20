@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-16 14:38:17
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-17 17:07:57
+ * @LastEditTime: 2022-05-20 16:11:32
 -->
 <template>
   <div class="design-list">
@@ -43,7 +43,7 @@ const { widgetList, curWidget } = toRefs(useDesignStore());
     position: absolute;
     width: 100%;
     height: 100%;
-    user-select: none;
+    // user-select: none;
   }
 }
 </style>
