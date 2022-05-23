@@ -21,7 +21,6 @@ const { decomposeWidget } = useWidgetAndGroup();
 // 拖拽选中区域，选择包含物料
 function selectedArea(e: any) {
   e.stopPropagation();
-  e.preventDefault();
 
   console.log('拖拽选中区域，选择包含物料');
   

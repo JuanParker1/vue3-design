@@ -11,6 +11,8 @@
       ref="text"
       v-html="propValue"
       @input="handleInput"
+      tabindex="0"
+
     ></div>
   </div>
 </template>

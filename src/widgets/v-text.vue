@@ -5,11 +5,12 @@
       class="text-content"
       ref="textRef"
       tabindex="0"
+      :contenteditable="isEidt"
+      v-html="props.item.value"
       @dblclick="enterEdit"
       @mousedown="handleMousedown"
       @keydown="handleKeydown"
-      :contenteditable="isEidt"
-      v-html="props.item.value"
+      @blur="handleBlur"
     ></div>
   </div>
 </template>
@@ -55,9 +56,15 @@ function handleKeydown(e: any) {
   console.log("e.keyCod", e.keyCode);
   if ([8, 46].includes(e.keyCode)) {
     // deleteKey
-    console.log("deleteKey");
     e.stopPropagation();
   }
+}
+
+// 失去焦点
+function handleBlur(e: any) {
+  console.log("失去焦点");
+  props.item.value = e.target.innerHTML || "&nbsp;";
+  isEidt.value = false;
 }
 </script>
 
