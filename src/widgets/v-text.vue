@@ -1,13 +1,13 @@
 
 <template>
-  <div
-    class="text"
-    @dblclick="enterEdit"
-    @mousedown="handleMousedown"
-    @keydown="handleKeydown"
-  >
+  <div class="text">
     <div
+      class="text-content"
       ref="textRef"
+      tabindex="0"
+      @dblclick="enterEdit"
+      @mousedown="handleMousedown"
+      @keydown="handleKeydown"
       :contenteditable="isEidt"
       v-html="props.item.value"
     ></div>
@@ -27,9 +27,10 @@ let isEidt = ref(false);
 const textRef = ref<HTMLElement | null>(null);
 
 function enterEdit(e: any) {
-  console.log("enterEdit");
   isEidt.value = true;
   selectAll();
+  // 获取焦点
+  textRef.value && textRef.value.focus();
 }
 
 // 文本全选
@@ -37,6 +38,7 @@ function selectAll() {
   const selection: any = window.getSelection();
   const range = document.createRange();
   range.selectNodeContents(textRef.value as any);
+  console.log("textRef.value", textRef.value);
   selection.removeAllRanges();
   selection.addRange(range);
 }
@@ -63,8 +65,8 @@ function handleKeydown(e: any) {
 .text {
   width: 100%;
   height: 100%;
-  div {
-    display: table-cell;
+  padding: 5px;
+  .text-content {
     width: 100%;
     height: 100%;
     outline: none;
