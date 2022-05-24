@@ -2,12 +2,12 @@
 <template>
   <div class="text" @dblclick="enterEdit">
     <span
-      :id="textId"
+      :id="item.id"
       class="text-content"
       ref="textRef"
       tabindex="0"
       :contenteditable="isEidt"
-      :style="{ fontSize: `${item.style.fontSize}px` }"
+      :style="{ fontSize: `${props.item.style.fontSize}px` }"
       v-html="props.item.value"
       @mousedown="handleMousedown"
       @keydown="handleKeydown"
@@ -29,10 +29,6 @@ const props = defineProps({
 
 let isEidt = ref(false);
 const textRef = ref<HTMLElement | null>(null);
-
-const textId = computed(() => {
-  return "text-" + props.item.id;
-});
 
 // 进入编辑模式
 function enterEdit(e: any) {
@@ -91,7 +87,7 @@ function handleKeydown(e: any) {
   .text-content {
     display: inline-block;
     outline: none;
-    line-height: 2.2;
+    line-height: 2;
     word-break: break-all;
   }
 }

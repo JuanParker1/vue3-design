@@ -3,13 +3,14 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-19 18:27:10
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-24 09:32:26
+ * @LastEditTime: 2022-05-24 19:11:05
  */
 import { ref, toRefs, computed } from "vue";
 import { useDesignStore } from "@/store/design";
 import { useCanvas } from "./useCanvas";
 import { calculateComponentPositonAndSize } from "@/hooks/design/useAnglePositon";
 import { getCommonStyle } from "@/utils/style";
+import _ from "lodash";
 
 const diff: number = 2; // 旋转吸附角度
 let lineThick: number = 3; // 框边厚度
@@ -17,6 +18,8 @@ let inRotate = ref(false);
 const { curWidget } = toRefs(useDesignStore());
 const { canvasRect } = toRefs(useCanvas());
 const { setCurrWidgetStyle } = useDesignStore();
+
+let textWidget = ["v-text"]; // 文本物料，取消上下操作圆点，增加随物料大小改变字体大小功能
 
 // grip 中心点样式
 const gripStyle = computed(() => {
@@ -38,7 +41,7 @@ const gripStyle = computed(() => {
 const points = computed(() => {
   let style = curWidget.value.style;
 
-  return [
+  let basisPoint = [
     {
       name: "lt",
       style: getCommonStyle({
@@ -46,12 +49,7 @@ const points = computed(() => {
         left: -(style.width / 2),
       }),
     },
-    {
-      name: "t",
-      style: getCommonStyle({
-        top: -(style.height / 2 + lineThick),
-      }),
-    },
+
     {
       name: "rt",
       style: getCommonStyle({
@@ -72,12 +70,7 @@ const points = computed(() => {
         left: style.width / 2,
       }),
     },
-    {
-      name: "b",
-      style: getCommonStyle({
-        top: style.height / 2 + lineThick,
-      }),
-    },
+
     {
       name: "lb",
       style: getCommonStyle({
@@ -92,6 +85,26 @@ const points = computed(() => {
       }),
     },
   ];
+
+  // 文本类物料不包含上下节点
+  let otherPoint = !textWidget.includes(curWidget?.value?.component)
+    ? [
+        {
+          name: "t",
+          style: getCommonStyle({
+            top: -(style.height / 2 + lineThick),
+          }),
+        },
+        {
+          name: "b",
+          style: getCommonStyle({
+            top: style.height / 2 + lineThick,
+          }),
+        },
+      ]
+    : [];
+
+  return [...basisPoint, ...otherPoint];
 });
 
 // 从中心的计算四条边动态样式
@@ -139,12 +152,6 @@ function resizeGripWidget(e: any, point: string) {
   // 组件宽高比
   const proportion = style.width / style.height;
 
-  // 组件中心点
-  const center = {
-    x: style.left + style.width / 2,
-    y: style.top + style.height / 2,
-  };
-
   // 获取画布位移信息
   const { x: canvasX, y: canvasY } = canvasRect.value as any;
 
@@ -154,14 +161,20 @@ function resizeGripWidget(e: any, point: string) {
     y: e.clientY - canvasY,
   };
 
+  // 组件中心点
+  let center = {
+    x: style.left + style.width / 2,
+    y: style.top + style.height / 2,
+  };
+
   // 获取对称点的坐标
-  const symmetricPoint = {
+  let symmetricPoint = {
     x: center.x - (curPoint.x - center.x),
     y: center.y - (curPoint.y - center.y),
   };
 
   // 调整直角点时，保持比例改变
-  const keepProportion = point.length == 2;
+  const isAnglePoint = point.length == 2;
   let isFirst = true;
 
   const move = (moveEvent: any) => {
@@ -177,12 +190,22 @@ function resizeGripWidget(e: any, point: string) {
       y: moveEvent.clientY - canvasY,
     };
 
+    // 调整text物料宽度时，获取text物料最新高度计算（文字跨行高度会变化）
+    if (textWidget.includes(curWidget?.value?.component)) {
+      let height = document.getElementById(curWidget.value.id).offsetHeight;
+
+      // 操作边圆点
+      if (!isAnglePoint) {
+        style.height = height;
+      }
+    }
+
     calculateComponentPositonAndSize(
       point,
       style,
       curPositon,
       proportion,
-      keepProportion,
+      isAnglePoint,
       {
         center,
         curPoint,
@@ -190,10 +213,13 @@ function resizeGripWidget(e: any, point: string) {
       }
     );
 
-    // text物料，随其高度变化改变字体大小
-    if (curWidget?.value?.component == "v-text") {
-      let scale = style.height / curWidget.value.style.height;
-      style.fontSize *= scale;
+    // 调整text物料大小时，随其高度变化改变字体大小
+    if (textWidget.includes(curWidget?.value?.component)) {
+      // 操作角圆点
+      if (isAnglePoint) {
+        let scale = style.height / curWidget.value.style.height;
+        style.fontSize *= scale;
+      }
     }
 
     setCurrWidgetStyle(style);

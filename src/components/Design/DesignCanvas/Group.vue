@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-16 11:43:15
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-20 16:10:25
+ * @LastEditTime: 2022-05-24 14:12:23
 -->
 <template>
   <div class="group">
@@ -20,7 +20,11 @@
       :id="'widget-' + item.id"
       @click="setCurGroupWidget(item.id)"
     >
-      <component :is="item.component" class="design-shell-widget" />
+      <component
+        :is="item.component"
+        :item="item"
+        class="design-shell-widget"
+      />
     </div>
   </div>
 </template>
