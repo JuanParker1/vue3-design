@@ -3,27 +3,26 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-16 11:43:15
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-24 14:12:23
+ * @LastEditTime: 2022-05-24 20:24:10
 -->
 <template>
   <div class="group">
     <div
       class="group-item"
-      :class="
-        curGroupWidget && curGroupWidget.id == item.id
-          ? 'group-item-active'
-          : ''
-      "
       v-for="item in group.list"
       :key="item.id"
-      :style="getCommonStyle(item.groupStyle, 'fontSize', '%')"
+      :style="getGroupItemStyle(item)"
       :id="'widget-' + item.id"
       @click="setCurGroupWidget(item.id)"
     >
       <component
         :is="item.component"
         :item="item"
-        class="design-shell-widget"
+        :class="
+          curGroupWidget && curGroupWidget.id == item.id
+            ? 'group-item-active'
+            : ''
+        "
       />
     </div>
   </div>
@@ -52,6 +51,12 @@ onBeforeMount(() => {
     composeWidgetStyle(props.group.style, item.groupStyle);
   });
 });
+
+function getGroupItemStyle(item: any) {
+  return item.component == "v-text"
+    ? getCommonStyle(item.groupStyle, ["height", "fontSize"], "%")
+    : getCommonStyle(item.groupStyle, ["fontSize"], "%");
+}
 </script>
 
 <style lang="scss" scoped>

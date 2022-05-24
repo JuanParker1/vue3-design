@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 11:30:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-23 11:10:51
+ * @LastEditTime: 2022-05-24 20:08:33
  */
 export default [
   {
@@ -38,8 +38,8 @@ export default [
       // 组件样式
       rotate: 0,
       width: 100,
-      height: 30,
-      fontSize: 14,
+      height: 25,
+      fontSize: 12,
       fontWeight: 500,
       lineHeight: '',
       letterSpacing: 0,

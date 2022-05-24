@@ -84,10 +84,11 @@ function handleKeydown(e: any) {
 <style lang="scss" scoped>
 .text {
   width: 100%;
+  text-align: center;
   .text-content {
     display: inline-block;
     outline: none;
-    line-height: 2;
+    line-height: 1.8;
     word-break: break-all;
   }
 }
