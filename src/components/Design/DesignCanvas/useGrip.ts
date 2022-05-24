@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-19 18:27:10
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-19 20:41:04
+ * @LastEditTime: 2022-05-24 09:32:26
  */
 import { ref, toRefs, computed } from "vue";
 import { useDesignStore } from "@/store/design";
@@ -189,6 +189,12 @@ function resizeGripWidget(e: any, point: string) {
         symmetricPoint,
       }
     );
+
+    // text物料，随其高度变化改变字体大小
+    if (curWidget?.value?.component == "v-text") {
+      let scale = style.height / curWidget.value.style.height;
+      style.fontSize *= scale;
+    }
 
     setCurrWidgetStyle(style);
   };

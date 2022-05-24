@@ -7,6 +7,7 @@
       ref="textRef"
       tabindex="0"
       :contenteditable="isEidt"
+      :style="{ fontSize: `${item.style.fontSize}px` }"
       v-html="props.item.value"
       @mousedown="handleMousedown"
       @keydown="handleKeydown"
@@ -26,31 +27,12 @@ const props = defineProps({
   },
 });
 
-let oldHeiget = _.cloneDeep(props.item.style.height);
 let isEidt = ref(false);
 const textRef = ref<HTMLElement | null>(null);
 
 const textId = computed(() => {
   return "text-" + props.item.id;
 });
-
-watch(
-  props.item.style,
-  (curVal, preVal) => {
-    let scale = curVal.height / oldHeiget;
-    console.log('curVal.height', curVal.height);
-    console.log('oldHeiget', oldHeiget);
-    console.log('scale', scale);
-    console.log("preVal", JSON.stringify(preVal));
-    // 不在编译状态
-    if (!isEidt.value) {
-      props.item.style.fontSize = props.item.style.fontSize * scale;
-      console.log("props.item.style.fontSize", props.item.style.fontSize);
-    }
-    oldHeiget = curVal.height;
-  },
-  { deep: true }
-);
 
 // 进入编辑模式
 function enterEdit(e: any) {
@@ -109,7 +91,7 @@ function handleKeydown(e: any) {
   .text-content {
     display: inline-block;
     outline: none;
-    line-height: 1.8;
+    line-height: 2.2;
     word-break: break-all;
   }
 }
