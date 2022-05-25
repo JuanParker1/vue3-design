@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-17 11:09:43
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-25 17:04:45
+ * @LastEditTime: 2022-05-25 17:15:57
  */
 /**
  * 物料纳入组合中的样式（改为对应百分比数据）
@@ -15,6 +15,7 @@ function composeWidgetStyle(groupStyle: any, itemStyle: any) {
   itemStyle.top = (itemStyle.top - groupStyle.top) / groupStyle.height;
   itemStyle.width = itemStyle.width / groupStyle.width;
   itemStyle.height = itemStyle.height / groupStyle.height;
+  console.log('itemStyle.height', itemStyle.height);
 }
 
 /**
@@ -40,6 +41,8 @@ function decomposeWidget(widget, group, canvasRect) {
   // 计算出元素新的 top left 坐标
   widget.style.left = center.x - widget.style.width / 2;
   widget.style.top = center.y - widget.style.height / 2;
+  console.log("widget.style.width", widget.style.width);
+  console.log(" widget.style.height", widget.style.height);
 }
 
 export const useWidgetAndGroup = () => ({
