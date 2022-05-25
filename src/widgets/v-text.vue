@@ -14,7 +14,6 @@
       @blur="exitEdit"
       @input="changeVal"
     ></span>
-    <!-- {{props.item.style.height}} -->
   </div>
 </template>
 

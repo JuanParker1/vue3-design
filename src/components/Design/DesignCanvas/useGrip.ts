@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-19 18:27:10
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-25 14:43:57
+ * @LastEditTime: 2022-05-25 16:05:40
  */
 import { ref, toRefs, computed } from "vue";
 import { useDesignStore } from "@/store/design";
@@ -194,7 +194,7 @@ function resizeGripWidget(e: any, point: string) {
     if (textWidget.includes(curWidget?.value?.component)) {
       let height = document.getElementById(curWidget.value.id).offsetHeight;
 
-      // 操作边圆点
+      // 操作Grip边时
       if (!isAnglePoint) {
         style.height = height;
       }
@@ -213,27 +213,37 @@ function resizeGripWidget(e: any, point: string) {
       }
     );
 
+    // 收缩比例
+    let scaleH = style.height / curWidget.value.style.height;
+    let scaleW = style.width / curWidget.value.style.width;
+
+    if (style.width <= 15 || style.height <= 15) return;
+
     // text物料特殊处理
     if (textWidget.includes(curWidget?.value?.component)) {
-      // 调整text物料大小时，随其高度变化改变字体大小
+      // 操作Grip角时
       if (isAnglePoint) {
-        let scale = style.height / curWidget.value.style.height;
-
-        // if (style.fontSize * scale < 12) {
-        //   style.fontSize = 12;
-        //   return;
-        // }
-        style.fontSize *= scale;
+        // 如果当前字体到达12px阈值，则无法缩小
+        if (style.fontSize == 12 && scaleH < 1) {
+          return;
+        } else if (style.fontSize * scaleH < 12) {
+          // 缩小到接近12px时，设置为12px
+          style.fontSize = 12;
+        } else {
+          // 随Grip收缩，改变字体大小
+          style.fontSize = style.fontSize * scaleH;
+        }
       }
     }
 
     // group物料特殊处理
     if (curWidget?.value?.component == "Group") {
-      let scale = style.height / curWidget.value.style.height;
       curWidget?.value?.list.map((w: any) => {
-        if (w.component == "v-text") w.style.fontSize *= scale;
+        if (w.component == "v-text") w.style.fontSize *= scaleH;
       });
     }
+
+    console.log("change:" + style.fontSize);
 
     setCurrWidgetStyle(style);
   };
