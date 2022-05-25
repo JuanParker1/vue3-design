@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 15:04:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-23 11:07:11
+ * @LastEditTime: 2022-05-25 14:11:44
 -->
 <template>
   <div
@@ -61,7 +61,6 @@ import MarkLine from "./MarkLine.vue";
 import Area from "./Area.vue";
 import Group from "./Group.vue";
 import Grip from "./Grip.vue";
-import DesignWidgetList from "./DesignWidgetList.vue";
 
 const { widgetList, curWidget } = toRefs(useDesignStore());
 const { handleDrop, handleDragOver, initCanvaConfig } = useDesignStore();

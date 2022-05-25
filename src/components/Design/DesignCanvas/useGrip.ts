@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-19 18:27:10
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-24 20:01:33
+ * @LastEditTime: 2022-05-25 14:43:57
  */
 import { ref, toRefs, computed } from "vue";
 import { useDesignStore } from "@/store/design";
@@ -218,6 +218,11 @@ function resizeGripWidget(e: any, point: string) {
       // 调整text物料大小时，随其高度变化改变字体大小
       if (isAnglePoint) {
         let scale = style.height / curWidget.value.style.height;
+
+        // if (style.fontSize * scale < 12) {
+        //   style.fontSize = 12;
+        //   return;
+        // }
         style.fontSize *= scale;
       }
     }

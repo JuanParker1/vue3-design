@@ -7,19 +7,21 @@
       ref="textRef"
       tabindex="0"
       :contenteditable="isEidt"
-      :style="{ fontSize: `${props.item.style.fontSize}px` }"
+      :style="getTextStyle()"
       v-html="props.item.value"
       @mousedown="handleMousedown"
       @keydown="handleKeydown"
       @blur="exitEdit"
       @input="changeVal"
     ></span>
+    <!-- {{props.item.style.height}} -->
   </div>
 </template>
 
 <script setup lang='ts'>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import _ from "lodash";
+import { useResizeObserver } from "@vueuse/core";
 
 const props = defineProps({
   item: {
@@ -29,6 +31,16 @@ const props = defineProps({
 
 let isEidt = ref(false);
 const textRef = ref<HTMLElement | null>(null);
+
+// 监听text高度变化
+useResizeObserver(textRef, (entries) => {
+  const entry = entries[0];
+  const { width, height } = entry.contentRect;
+  if (height != props.item.style.height) {
+    console.log(`height: ${height}`);
+    props.item.style.height = height;
+  }
+});
 
 // 进入编辑模式
 function enterEdit(e: any) {
@@ -49,10 +61,6 @@ function exitEdit(e: any) {
 function changeVal(e: any) {
   // props.item.value = e.target.innerHTML || "&nbsp;";
   console.log("props.item.value", e.target.innerHTML);
-  // 获取当前高度,更新给物料
-  if (textRef.value) {
-    props.item.style.height = textRef.value.getBoundingClientRect().height;
-  }
 }
 
 // 文本全选
@@ -68,6 +76,16 @@ function handleMousedown(e: any) {
   if (isEidt.value) {
     e.stopPropagation();
   }
+}
+
+function getTextStyle() {
+  let { style } = props.item;
+  return {
+    fontSize: `${style.fontSize}px`,
+    ...(style.fontSize < 12
+      ? { transform: `scale(${style.fontSize / 12})` }
+      : {}),
+  };
 }
 
 // 特殊按键操作
