@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-05-19 18:27:10
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-25 16:05:40
+ * @LastEditTime: 2022-05-25 16:17:45
  */
 import { ref, toRefs, computed } from "vue";
 import { useDesignStore } from "@/store/design";
@@ -15,6 +15,7 @@ import _ from "lodash";
 const diff: number = 2; // 旋转吸附角度
 let lineThick: number = 3; // 框边厚度
 let inRotate = ref(false);
+let movePoint = ref("");
 const { curWidget } = toRefs(useDesignStore());
 const { canvasRect } = toRefs(useCanvas());
 const { setCurrWidgetStyle } = useDesignStore();
@@ -39,6 +40,7 @@ const gripStyle = computed(() => {
 
 // 从中心的计算8个圆点样式
 const points = computed(() => {
+  let result = [];
   let style = curWidget.value.style;
 
   let basisPoint = [
@@ -104,7 +106,15 @@ const points = computed(() => {
       ]
     : [];
 
-  return [...basisPoint, ...otherPoint];
+  if (movePoint.value) {
+    result = [...basisPoint, ...otherPoint].filter(
+      (point: any) => point.name == movePoint.value
+    );
+  } else {
+    result = [...basisPoint, ...otherPoint];
+  }
+
+  return result;
 });
 
 // 从中心的计算四条边动态样式
@@ -116,13 +126,13 @@ const lines = computed(() => {
       top: -(style.height / 2 + lineThick),
       left: -(style.width / 2),
       height: lineThick,
-      width: style.width,
+      width: style.width + 3,
     }),
     // left-line
     getCommonStyle({
-      top: -(style.height / 2),
+      top: -(style.height / 2) - 3,
       left: -(style.width / 2 + lineThick),
-      height: style.height,
+      height: style.height + 6,
       width: lineThick,
     }),
     // right-line
@@ -137,7 +147,7 @@ const lines = computed(() => {
       top: style.height / 2,
       left: -(style.width / 2),
       height: lineThick,
-      width: style.width,
+      width: style.width + 3,
     }),
   ];
 });
@@ -147,6 +157,7 @@ function resizeGripWidget(e: any, point: string) {
   e.stopPropagation();
   e.preventDefault();
 
+  movePoint.value = point;
   const style: any = { ...curWidget.value?.style };
 
   // 组件宽高比
@@ -214,8 +225,7 @@ function resizeGripWidget(e: any, point: string) {
     );
 
     // 收缩比例
-    let scaleH = style.height / curWidget.value.style.height;
-    let scaleW = style.width / curWidget.value.style.width;
+    let scale = style.height / curWidget.value.style.height;
 
     if (style.width <= 15 || style.height <= 15) return;
 
@@ -224,14 +234,14 @@ function resizeGripWidget(e: any, point: string) {
       // 操作Grip角时
       if (isAnglePoint) {
         // 如果当前字体到达12px阈值，则无法缩小
-        if (style.fontSize == 12 && scaleH < 1) {
+        if (style.fontSize == 12 && scale < 1) {
           return;
-        } else if (style.fontSize * scaleH < 12) {
+        } else if (style.fontSize * scale < 12) {
           // 缩小到接近12px时，设置为12px
           style.fontSize = 12;
         } else {
           // 随Grip收缩，改变字体大小
-          style.fontSize = style.fontSize * scaleH;
+          style.fontSize = style.fontSize * scale;
         }
       }
     }
@@ -239,16 +249,15 @@ function resizeGripWidget(e: any, point: string) {
     // group物料特殊处理
     if (curWidget?.value?.component == "Group") {
       curWidget?.value?.list.map((w: any) => {
-        if (w.component == "v-text") w.style.fontSize *= scaleH;
+        if (w.component == "v-text") w.style.fontSize *= scale;
       });
     }
-
-    console.log("change:" + style.fontSize);
 
     setCurrWidgetStyle(style);
   };
 
   const up = () => {
+    movePoint.value = "";
     document.removeEventListener("mousemove", move);
     document.removeEventListener("mouseup", up);
   };

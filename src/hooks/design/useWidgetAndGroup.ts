@@ -1,3 +1,10 @@
+/*
+ * @Description: What's this for
+ * @Autor: WangYuan1
+ * @Date: 2022-05-17 11:09:43
+ * @LastEditors: WangYuan
+ * @LastEditTime: 2022-05-25 17:04:45
+ */
 /**
  * 物料纳入组合中的样式（改为对应百分比数据）
  * @param groupStyle 组合样式
@@ -14,9 +21,15 @@ function composeWidgetStyle(groupStyle: any, itemStyle: any) {
  * 物料从组合拆分
  */
 function decomposeWidget(widget, group, canvasRect) {
-  const widgetRect = document
-    .querySelector(`#widget-${widget.id}`)
-    .getBoundingClientRect();
+  let element: any = document.querySelector(`#widget-${widget.id}`);
+  if (!element) return;
+
+  const widgetRect = element?.getBoundingClientRect();
+  const { offsetWidth, offsetHeight } = element;
+
+  widget.style.rotate = widget.style.rotate + group.style.rotate;
+  widget.style.width = offsetWidth;
+  widget.style.height = offsetHeight;
 
   // 获取元素的中心点坐标
   const center = {
@@ -24,9 +37,6 @@ function decomposeWidget(widget, group, canvasRect) {
     y: widgetRect.top - canvasRect.y + widgetRect.height / 2,
   };
 
-  widget.style.rotate = widget.style.rotate + group.style.rotate;
-  widget.style.width = widget.groupStyle.width * group.style.width;
-  widget.style.height = widget.groupStyle.height * group.style.height;
   // 计算出元素新的 top left 坐标
   widget.style.left = center.x - widget.style.width / 2;
   widget.style.top = center.y - widget.style.height / 2;
