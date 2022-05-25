@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-04-27 11:30:19
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-05-24 20:08:33
+ * @LastEditTime: 2022-05-24 19:17:33
  */
 export default [
   {
@@ -39,7 +39,7 @@ export default [
       rotate: 0,
       width: 100,
       height: 25,
-      fontSize: 12,
+      fontSize: 14,
       fontWeight: 500,
       lineHeight: '',
       letterSpacing: 0,
